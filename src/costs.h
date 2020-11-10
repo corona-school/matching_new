@@ -151,6 +151,7 @@ namespace CS{
         }
 
         //Container that holds the different cost components which are used ot generate the total cost.
+        //TODO: Rename to cost component
         std::vector<std::pair<double, RawCostComponent>> cost_components_with_coefficients;
         //Index map for the different cost components (by type)
         std::map<CostType, ID> cost_component_by_type;
