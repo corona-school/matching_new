@@ -47,7 +47,7 @@ namespace CS {
     void dump_matching_edges_into_json(const std::vector<Edge> & edges, const GraphCreator & gc, std::string const & file_name) {
         nlohmann::json output_json;
         for (auto const & edge : edges) {
-            output_json.push_back({{"student input_file_id:",
+            output_json.push_back({{"student uuid:",
                                    gc.nodes().college_student(edge.college_student_id).data().input_uuid},
                                    {"pupil uuid:",gc.nodes().pupil(edge.pupil_id).data().input_uuid}});
         }
