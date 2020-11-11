@@ -108,12 +108,7 @@ namespace CS {
         student_file >> student_data_file;
         //Build pupils and students with the data in the json file.
         _nodes.pupils().reserve(pupil_data_file.size());
-        unsigned pupil_count{0u};
         for (auto const &pupil_json_data : pupil_data_file) {
-            if (pupil_count < pupil_data_file.size() -1000) {
-                pupil_count++;
-                continue;
-            }
             if (pupil_uuids && (!contains<std::string>(*pupil_uuids, pupil_json_data["uuid"]))) {
                 //This pupil cannot be matched currently..
                 continue;
@@ -129,16 +124,10 @@ namespace CS {
             for (auto const &fach : pupil_json_data["subjects"]) {
                 pupil_data.requested_subjects.emplace_back(parse_subject(fach["name"]));
             }
-            pupil_count++;
         }
 
         _nodes.college_students().reserve(student_data_file.size());
-        unsigned student_count{0u};
         for (auto const &student_json_data : student_data_file) {
-            if (student_count < student_data_file.size() - 1000) {
-                student_count++;
-                continue;
-            }
             if ( student_uuids && (!contains<std::string>(*student_uuids, student_json_data["uuid"]))) {
                 //This student cannot be matched currently
                 continue;
@@ -168,7 +157,6 @@ namespace CS {
                 }
                 student_data.offered_subjects.push_back({subject, 1., range});
             }
-            student_count++;
         }
         //Create edges:
         create_edges();
