@@ -11,8 +11,13 @@ namespace CS {
 
     using ID = std::uint32_t;
     using Grade = std::uint8_t;
+    using Subject = std::string;
+    using Bundesland = std::string;
     static constexpr unsigned MIN_POSSIBLE_GRADE{1u};
     static constexpr unsigned MAX_POSSIBLE_GRADE{13u};
+    static constexpr ID InvalidId{std::numeric_limits<ID>::max()};
+    const Subject InvalidSubject{"InvalidSubject"};
+    const Bundesland InvalidBundesland{"InvalidBundesland"};
     ///Typedefs for the boost graph that will be created. We need to set all the types explicitly:
     typedef boost::adjacency_list_traits < boost::vecS, boost::vecS, boost::directedS > Traits;
     typedef boost::adjacency_list < boost::vecS, boost::vecS, boost::directedS,
@@ -25,55 +30,6 @@ namespace CS {
                     boost::property <boost::edge_weight_t, int,
                     boost::property < boost::edge_reverse_t, Traits::edge_descriptor > > > > > Graph;
 
-    ///Enum for all subjects
-    enum Subject {
-        Deutsch,
-        Mathematik,
-        Englisch,
-        Physik,
-        Chemie,
-        Biologie,
-        Informatik,
-        Franzoesisch,
-        Spanisch,
-        Latein,
-        Erdkunde,
-        Sozialkunde,
-        Geschichte,
-        Wirtschaft,
-        Politik,
-        Philosophie,
-        Musik,
-        Kunst,
-        Paedagogik,
-        Religion,
-        Altgriechisch,
-        Italienisch,
-        Russisch,
-        Niederlaendisch,
-        Chinesisch
-    };
-
-    ///Enum for all states of Germany
-    enum Bundesland {
-        BadenWuerttemberg,
-        Bayern,
-        Berlin,
-        Brandenburg,
-        Bremen,
-        Hamburg,
-        Hessen,
-        MecklemburgVorpommern,
-        Niedersachsen,
-        NordrheinWestfalen,
-        RheinlandPfalz,
-        Saarland,
-        Sachsen,
-        SachsenAnhalt,
-        SchleswigHolstein,
-        Thueringen,
-        Invalid
-    };
 
     ///Struct for a range of grades that are specified by a college student.
     ///@note: The grades might not be consecutive, i.e. there can be gaps.
@@ -91,15 +47,15 @@ namespace CS {
 
     ///Struct for requested subjects (of pupils).
     struct RequestedSubject {
-        Subject  subject;
+        Subject  subject = InvalidSubject;
         double preference_value = 1.;
 
-        explicit RequestedSubject(Subject s): subject(s){};
+        explicit RequestedSubject(Subject && s): subject(std::move(s)){};
     };
 
     ///Struct for offered subjects (of students).
     struct OfferedSubject {
-        Subject subject;
+        Subject subject = InvalidSubject;
         double preference_value = 1.;
         GradeRange grade_range;
     };
@@ -110,8 +66,8 @@ namespace CS {
         ///Interface for node data. It serves as a base class for student and pupil data.
         ///The idea is that it contains shared properties such as a field for the uuid and one for the state of germany.
         struct DataIF {
-            Bundesland bundesland = Bundesland::Invalid;
-            ID input_file_id;
+            Bundesland bundesland = InvalidBundesland;
+            ID input_file_id = InvalidId;
             std::string input_uuid;
             double waiting_days = 0; //Want have also fractions of a day, therefore double..
         };

@@ -88,7 +88,7 @@ namespace CS{
             //The cost component returns 1 if the states match, otherwise it returns 0
             add_cost_component(CostType::BundeslandBonus,
                     [](const CollegeStudent & student, const Pupil & pupil){
-                if ((student.data().bundesland == Bundesland::Invalid)  || (pupil.data().bundesland == Bundesland::Invalid)) {
+                if ((student.data().bundesland == InvalidBundesland)  || (pupil.data().bundesland == InvalidBundesland)) {
                     return 0.;
                 }
                 return (student.data().bundesland == pupil.data().bundesland) ? 1. : 0.;});

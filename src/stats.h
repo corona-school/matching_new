@@ -98,15 +98,6 @@ namespace CS {
 
     void dump_stats(std::vector<Edge> const & matching_edges, const GraphCreator & gc, double matching_cost, std::string const & file_name) {
         nlohmann::json output_json;
-        std::map<Subject, std::string> subject_to_string = {{Deutsch, "Deutsch"}, {Mathematik, "Mathematik"},
-                                                                            {Englisch, "Englisch"}, {Physik, "Physik"}, {Chemie, "Chemie"},
-                                                                             {Biologie, "Biologie"},{Informatik, "Informatik"},
-                                                                              {Franzoesisch,"Französisch"},{Spanisch, "Spanisch"},
-                                                                               {Latein, "Latein"}, {Erdkunde, "Erdkunde"}, {Sozialkunde, "Sozialkunde"},
-                                                            {Geschichte, "Geschichte"}, {Wirtschaft, "Wirtschaft"}, {Politik, "Politik"}, {Philosophie, "Philosophie"},
-                                                             {Musik, "Musik"}, {Kunst, "Kunst"}, {Paedagogik, "Pädagogik"}, {Religion,"Religion"},
-                                                                 {Altgriechisch, "Altgriechisch"},{Italienisch, "Italienisch"},{Russisch, "Russisch"},
-                                                                 {Niederlaendisch, "Niederländisch"},  {Chinesisch, "Chinesisch"}};
         std::map<Subject, unsigned> num_subject_offered;
         std::map<Subject, unsigned> num_subject_requested;
         std::map<Subject, unsigned> num_subject_request_fulfilled;
@@ -138,7 +129,7 @@ namespace CS {
             auto const same_sub_num = get_same_subject_number(student, pupil, num_subject_request_fulfilled);;
             num_cov_subjects += same_sub_num;
             num_uncov_sub += pupil.data().requested_subjects.size() - same_sub_num;
-            if ((student.data().bundesland != Bundesland::Invalid) && (student.data().bundesland == pupil.data().bundesland)) {
+            if ((student.data().bundesland != InvalidBundesland) && (student.data().bundesland == pupil.data().bundesland)) {
                 num_bund_match++;
             }
         }
@@ -159,7 +150,7 @@ namespace CS {
         output_json.push_back({"Total number of offered subjects", num_offered_subjects});
         output_json.push_back({"Total number of matching edges with matching bundesland", num_bund_match});
         for (auto const & [key, val] : num_subject_offered) {
-            output_json.push_back({subject_to_string[key], {{"offered", val}, {"requested", num_subject_requested[key]},
+            output_json.push_back({key, {{"offered", val}, {"requested", num_subject_requested[key]},
                                                             {"requests fulfilled", num_subject_request_fulfilled[key]}}});
         }
         std::ofstream out(file_name);

@@ -7,64 +7,7 @@
 using json = nlohmann::json;
 
 namespace CS {
-    //Helper method to convert a string encoding a state into the suiting enum.
-    Bundesland parse_bundesland(std::string bl) {
-        ///Convert the string to lower case:
-        std::for_each(bl.begin(), bl.end(), [](char &c) {
-            c = std::tolower(c);
-        });
-        if (bl == "bb") return Brandenburg;
-        if (bl == "be") return Berlin;
-        if (bl == "bw") return BadenWuerttemberg;
-        if (bl == "by") return Bayern;
-        if (bl == "hb") return Bremen;
-        if (bl == "he") return Hessen;
-        if (bl == "hh") return Hamburg;
-        if (bl == "mv") return MecklemburgVorpommern;
-        if (bl == "ni") return Niedersachsen;
-        if (bl == "nw") return NordrheinWestfalen;
-        if (bl == "rp") return RheinlandPfalz;
-        if (bl == "sh") return SchleswigHolstein;
-        if (bl == "sl") return Saarland;
-        if (bl == "sn") return Sachsen;
-        if (bl == "st") return SachsenAnhalt;
-        if (bl == "th") return Thueringen;
-        return Invalid;
-    }
 
-    //Helper method converting a string encoding a subject into the suiting enum.
-    Subject parse_subject(std::string s) {
-        ///Convert the string to lower case:
-        std::for_each(s.begin(), s.end(), [](char &c) {
-            c = std::tolower(c);
-        });
-        if (s == "mathematik") return Mathematik;
-        if (s == "deutsch") return Deutsch;
-        if (s == "englisch") return Englisch;
-        if (s == "geschichte") return Geschichte;
-        if (s == "chemie") return Chemie;
-        if (s == "physik") return Physik;
-        if (s == "biologie") return Biologie;
-        if (s == "sozialkunde") return Sozialkunde;
-        if (s == "spanisch") return Spanisch;
-        if (s == "französisch") return Franzoesisch;
-        if (s == "informatik") return Informatik;
-        if (s == "erdkunde") return Erdkunde;
-        if (s == "latein") return Latein;
-        if (s == "wirtschaft") return Wirtschaft;
-        if (s == "politik") return Politik;
-        if (s == "philosophie") return Philosophie;
-        if (s == "musik") return Musik;
-        if (s == "kunst") return Kunst;
-        if (s == "pädagogik") return Paedagogik;
-        if (s == "religion") return Religion;
-        if (s == "altgriechisch") return Altgriechisch;
-        if (s == "italienisch") return Italienisch;
-        if (s == "russisch") return Russisch;
-        if (s == "niederländisch") return Niederlaendisch;
-        if (s == "chinesisch") return Chinesisch;
-        else std::cout << "subject not identified, name was" << s << std::endl;
-    }
 
     CostType parse_cost_type(std::string s) {
         std::for_each(s.begin(), s.end(), [](char &c) {
@@ -116,13 +59,13 @@ namespace CS {
             _nodes.create_pupils(1u);
             auto &pupil_data = _nodes.pupils().back().data();
             ///bundesland not yet featured
-            pupil_data.bundesland = parse_bundesland(pupil_json_data["state"]);
+            pupil_data.bundesland = pupil_json_data["state"];
             pupil_data.input_file_id = pupil_json_data["id"];
             pupil_data.input_uuid = pupil_json_data["uuid"];
             pupil_data.grade = pupil_json_data["grade"];
             pupil_data.waiting_days = get_day_difference_from_today(pupil_json_data["createdAt"]);
             for (auto const &fach : pupil_json_data["subjects"]) {
-                pupil_data.requested_subjects.emplace_back(parse_subject(fach["name"]));
+                pupil_data.requested_subjects.emplace_back(fach["name"]);
             }
         }
 
@@ -135,12 +78,12 @@ namespace CS {
             _nodes.create_college_students(1u);
             auto &student_data = _nodes.college_students().back().data();
             ///bundesland not yet featured
-            student_data.bundesland = parse_bundesland(student_json_data["state"]);
+            student_data.bundesland = student_json_data["state"];
             student_data.waiting_days = get_day_difference_from_today(student_json_data["createdAt"]);
             student_data.input_file_id = student_json_data["id"];
             student_data.input_uuid = student_json_data["uuid"];
             for (auto const &offered_sub : student_json_data["subjects"]) {
-                Subject const subject = parse_subject(offered_sub["name"]);
+                Subject const subject = offered_sub["name"];
                 GradeRange range;
                 //Currently only with min and max
                 unsigned min, max;
