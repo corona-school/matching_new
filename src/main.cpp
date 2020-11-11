@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
     gc.init_from_json(pupil_input_file_stream, student_input_file_stream, balancing_coefficients, std::nullopt, std::nullopt);
     std::vector<CS::Edge> matching_edges;
     auto const matching_cost = CS::compute_max_cost_matching(gc, matching_edges, CS::MatchingAlgorithm::SuccessiveShortestPath);
-    CS::test_matching_valid(matching_edges, gc.nodes());
+    CS::test_matching_valid(matching_edges, gc);
     ///The fourth file should encode the json output file for the matches
     CS::dump_matching_edges_into_json(matching_edges, gc, std::string(argv[4]));
     ///The fifth file should encode the json output file for the stats

@@ -8,14 +8,14 @@ namespace CS {
     /**
      * Function that verifies that the edges contained in @param matching_edges form a valid matching,
      * i.e. we check that each pupil and stundent is covered at most once and every match is valid.
-     * @param nodes The node container with information about students and pupils.
+     * @param gc The graph creator with information about students and pupils.
      */
-    void test_matching_valid(const std::vector<Edge> &matching_edges, const NodeContainer & nodes) {
-        std::vector<unsigned> student_matches(nodes.college_students().size(), 0u);
-        std::vector<unsigned> pupil_matches(nodes.pupils().size(), 0u);
+    void test_matching_valid(const std::vector<Edge> &matching_edges, const GraphCreator &gc) {
+        std::vector<unsigned> student_matches(gc.nodes().college_students().size(), 0u);
+        std::vector<unsigned> pupil_matches(gc.nodes().pupils().size(), 0u);
         for (auto const &edge : matching_edges) {
-            auto const & student = nodes.college_students()[edge.college_student_id];
-            auto const & pupil = nodes.pupils()[edge.pupil_id];
+            auto const & student = gc.nodes().college_student(edge.college_student_id);
+            auto const & pupil = gc.nodes().pupil(edge.pupil_id);
             //Check that pupil and student are not covered yet.
             if (pupil_matches[edge.pupil_id] >=1 ||
                 student_matches[edge.college_student_id] >= student.data().number_of_possible_matches) {
@@ -26,7 +26,7 @@ namespace CS {
             pupil_matches[edge.pupil_id]++;
             student_matches[edge.college_student_id]++;
             //Check that pupil and student accept each other.
-            if ((! pupil.accepts(student)) || (! student.accepts(pupil))) {
+            if (gc.is_possible_pairing(student.id(), pupil.id())) {
                 //TODO: Throw exceptions or write into log file.
                 std::cout<<"ERROR, MATCHING CONTAINS AN EDGE THAT SHOULD NOT EXIST!"<<std::endl;
                 break;

@@ -117,34 +117,10 @@ namespace CS {
         };
 
         using NodeIF::id;
-        inline explicit Pupil(ID id) : NodeIF(id) {
-            _acceptance_function = [&] (const CollegeStudent & student) {
-                for (auto const & uuid : _data.dissolved_matches_with) {
-                    if (uuid == student.data().input_uuid) {
-                        //This pair was already matched at some point, but they dissolved their matching.
-                        //So we do not want to match them again!
-                        return false;
-                    }
-                }
-                for (auto const & requested_subject : _data.requested_subjects) {
-                    for (auto const & offered_subject : student.data().offered_subjects) {
-                        if (requested_subject.subject == offered_subject.subject) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            };
-        }
+        inline explicit Pupil(ID id) : NodeIF(id) {}
 
         [[nodiscard]] inline PupilData const & data() const {return _data;}
         [[nodiscard]] inline PupilData & data() {return _data;}
-        [[nodiscard]] inline bool accepts(const CollegeStudent & student) const {
-            if (_acceptance_function) {
-                return _acceptance_function(student);
-            }
-            return false;
-        }
     private:
         PupilData _data;
         std::function<bool(const CollegeStudent &)> _acceptance_function;
@@ -222,22 +198,7 @@ namespace CS {
         std::vector<Pupil> _pupils;
     };
 
-    CollegeStudent::CollegeStudent(ID id) : NodeIF(id) {
-        _acceptance_function = [&] (const Pupil & pupil) {
-            for (auto const & offered_subject : _data.offered_subjects) {
-                if (!offered_subject.grade_range.contains(pupil.data().grade)) {
-                    //Grade does not fit for this subject!
-                    continue;
-                }
-                for (auto const & requested_subject : pupil.data().requested_subjects) {
-                    if (requested_subject.subject == offered_subject.subject) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        };
-    }
+    CollegeStudent::CollegeStudent(ID id) : NodeIF(id) {}
 } // namespace CS
 
 #endif //CORONA_SCHOOL_MATCHING_TYPES_H

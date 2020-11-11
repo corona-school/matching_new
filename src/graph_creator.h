@@ -33,6 +33,8 @@ namespace CS {
         init_from_json(std::ifstream &pupil_file, std::ifstream &student_file, std::ifstream &balancing_coefficients,
                 std::optional<std::vector<std::string>> const & pupil_uuids, std::optional<std::vector<std::string>> const & student_uuids);
 
+        bool is_possible_pairing(ID student_id, ID pupil_id) const;
+
         /**
          * @return The id of the virtual source node s in the min cost flow instance.
          */
