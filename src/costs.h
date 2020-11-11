@@ -16,7 +16,9 @@ namespace CS{
     enum CostType {
         BundeslandBonus,
         FachUebereinstimmung,
-        WaitingTimeBonus
+        WaitingTimeBonus,
+        MatchingPriorityBonus,
+        InvalidCostType
     };
 
     /**
@@ -92,6 +94,19 @@ namespace CS{
                     return 0.;
                 }
                 return (student.data().bundesland == pupil.data().bundesland) ? 1. : 0.;});
+        }
+
+        /**
+         * Function to add a bonus cost if the pupil has a high matching priority.
+         * @note This function should only be called once, multiple calls will not result in creation of
+         * multiple cost components.
+         */
+        inline void add_matching_priority_bonus() {
+            //The raw cost component just returns the priority value of the pupil.
+            add_cost_component(CostType::MatchingPriorityBonus,
+                    [](const CollegeStudent & student, const Pupil & pupil){
+               return pupil.data().matching_priority;
+            });
         }
 
         /**

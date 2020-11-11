@@ -16,6 +16,8 @@ namespace CS {
         if (s == "bundeslandbonus") return BundeslandBonus;
         if (s == "fachuebereinstimmung") return FachUebereinstimmung;
         if (s == "wartezeitbonus") return WaitingTimeBonus;
+        if (s == "matchingprioritybonus") return MatchingPriorityBonus;
+        return InvalidCostType;
     }
 
     double get_day_difference_from_today(const std::string &date) {
@@ -63,6 +65,7 @@ namespace CS {
             pupil_data.input_file_id = pupil_json_data["id"];
             pupil_data.input_uuid = pupil_json_data["uuid"];
             pupil_data.grade = pupil_json_data["grade"];
+            pupil_data.matching_priority = pupil_json_data["matchingPriority"];
             pupil_data.waiting_days = get_day_difference_from_today(pupil_json_data["createdAt"]);
             for (auto const & dissolved_matching: pupil_json_data["hasDissolvedMatchesWith"]) {
                 pupil_data.dissolved_matches_with.emplace_back(dissolved_matching["uuid"]);
@@ -114,6 +117,7 @@ namespace CS {
         edge_cost_computer.add_bundesland_bonus();
         edge_cost_computer.add_fachuebereinstimmung();
         edge_cost_computer.add_waiting_time_bonus();
+        edge_cost_computer.add_matching_priority_bonus();
         //balance the edge costs
         balance_edge_costs(balancing_coefficients);
         //Cache the edge costs:
@@ -148,7 +152,9 @@ namespace CS {
         //Collect the coefficients in the json file:
         for (auto it = balancing_coeff_json.begin(); it != balancing_coeff_json.end(); ++it) {
             CostType const cost_type = parse_cost_type(it.key());
-            cost_coefficients_by_type.emplace(cost_type, it.value());
+            if (cost_type != CostType::InvalidCostType) {
+                cost_coefficients_by_type.emplace(cost_type, it.value());
+            }
         }
         //Compute the fraction of the total cost that is currently consumed by each cost component:
         double total_cost{0.};

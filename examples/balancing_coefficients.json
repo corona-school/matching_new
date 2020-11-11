@@ -1,5 +1,6 @@
 {
-  "FachUebereinstimmung": 0.75,
+  "FachUebereinstimmung": 0.65,
   "BundeslandBonus": 0.05,
-  "WartezeitBonus": 0.2
+  "WartezeitBonus": 0.2,
+  "MatchingPriorityBonus": 0.1
 }

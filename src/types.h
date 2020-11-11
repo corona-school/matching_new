@@ -112,7 +112,8 @@ namespace CS {
     public:
         struct PupilData : public NodeIF::DataIF {
             std::vector<RequestedSubject> requested_subjects;
-            Grade grade;
+            double matching_priority{0.};
+            Grade grade = MIN_POSSIBLE_GRADE;
         };
 
         using NodeIF::id;
