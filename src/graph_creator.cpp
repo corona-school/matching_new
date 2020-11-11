@@ -64,6 +64,9 @@ namespace CS {
             pupil_data.input_uuid = pupil_json_data["uuid"];
             pupil_data.grade = pupil_json_data["grade"];
             pupil_data.waiting_days = get_day_difference_from_today(pupil_json_data["createdAt"]);
+            for (auto const & dissolved_matching: pupil_json_data["hasDissolvedMatchesWith"]) {
+                pupil_data.dissolved_matches_with.emplace_back(dissolved_matching["uuid"]);
+            }
             for (auto const &fach : pupil_json_data["subjects"]) {
                 pupil_data.requested_subjects.emplace_back(fach["name"]);
             }
@@ -82,6 +85,9 @@ namespace CS {
             student_data.waiting_days = get_day_difference_from_today(student_json_data["createdAt"]);
             student_data.input_file_id = student_json_data["id"];
             student_data.input_uuid = student_json_data["uuid"];
+            for (auto const &dissolved_matching : student_json_data["hasDissolvedMatchesWith"]) {
+                student_data.dissolved_matches_with.emplace_back(dissolved_matching["uuid"]);
+            }
             for (auto const &offered_sub : student_json_data["subjects"]) {
                 Subject const subject = offered_sub["name"];
                 GradeRange range;

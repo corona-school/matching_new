@@ -13,10 +13,12 @@ namespace CS {
     using Grade = std::uint8_t;
     using Subject = std::string;
     using Bundesland = std::string;
+    using UUID = std::string;
     static constexpr unsigned MIN_POSSIBLE_GRADE{1u};
     static constexpr unsigned MAX_POSSIBLE_GRADE{13u};
     static constexpr ID InvalidId{std::numeric_limits<ID>::max()};
     const Subject InvalidSubject{"InvalidSubject"};
+    const UUID InvalidUUID{"InvalidUUID"};
     const Bundesland InvalidBundesland{"other"}; ///This is how the input file indicates that the user has not specified the state!
     ///Typedefs for the boost graph that will be created. We need to set all the types explicitly:
     typedef boost::adjacency_list_traits < boost::vecS, boost::vecS, boost::directedS > Traits;
@@ -68,7 +70,8 @@ namespace CS {
         struct DataIF {
             Bundesland bundesland = InvalidBundesland;
             ID input_file_id = InvalidId;
-            std::string input_uuid;
+            UUID input_uuid = InvalidUUID;
+            std::vector<UUID> dissolved_matches_with;
             double waiting_days = 0; //Want have also fractions of a day, therefore double..
         };
 
@@ -114,6 +117,13 @@ namespace CS {
         using NodeIF::id;
         inline explicit Pupil(ID id) : NodeIF(id) {
             _acceptance_function = [&] (const CollegeStudent & student) {
+                for (auto const & uuid : _data.dissolved_matches_with) {
+                    if (uuid == student.data().input_uuid) {
+                        //This pair was already matched at some point, but they dissolved their matching.
+                        //So we do not want to match them again!
+                        return false;
+                    }
+                }
                 for (auto const & requested_subject : _data.requested_subjects) {
                     for (auto const & offered_subject : student.data().offered_subjects) {
                         if (requested_subject.subject == offered_subject.subject) {
