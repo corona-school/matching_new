@@ -34,6 +34,9 @@ namespace CS {
         }
     }
 
+    /**
+     * @return The maximum weight of an edge in the graph.
+     */
     inline CostValue maximum_edge_weight(const std::vector<Edge> &edges) {
         CostValue retval = 0.;
         for (auto const &edge : edges) {
@@ -42,9 +45,9 @@ namespace CS {
         return retval;
     }
 
-/**
- * @return An upper bound on the maximum number of possible matchings, which we use as the max flow value in the algorithm.
- */
+   /**
+    * @return An upper bound on the maximum number of possible matchings, which we use as the max flow value in the algorithm.
+    */
     inline unsigned get_max_flow_value(const GraphCreator &gc) {
         //Every pupil can be matched at most once, so the number of pupils is an upper bound on the number of possible matches.
         unsigned const bound1 = gc.nodes().pupils().size();
@@ -159,6 +162,7 @@ namespace CS {
             auto const student_index = gc.nodes().pupils().size() + student.id();
             add_edge(student_index, gc.t_id(), 0., student.data().number_of_possible_matches);
         }
+        ///Compute the minimum cost flow with the given algorithm:
         unsigned const max_flow_value = get_max_flow_value(gc);
         CostValue inverted_flow_cost = (algorithm  == CycleCanceling) ?
                                        compute_max_cost_matching_cycle_canceling(gc, edge_to_edge_descriptor, g, rev, residual_capacity, add_edge):
