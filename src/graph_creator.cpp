@@ -85,6 +85,7 @@ namespace CS {
             student_data.waiting_days = get_day_difference_from_today(student_json_data["createdAt"]);
             student_data.input_file_id = student_json_data["id"];
             student_data.input_uuid = student_json_data["uuid"];
+            student_data.number_of_possible_matches = student_json_data["numberOfOpenMatchRequests"];
             for (auto const &dissolved_matching : student_json_data["hasDissolvedMatchesWith"]) {
                 student_data.dissolved_matches_with.emplace_back(dissolved_matching["uuid"]);
             }

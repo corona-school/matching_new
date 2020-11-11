@@ -51,6 +51,21 @@ namespace CS {
         return retval;
     }
 
+    /**
+     * @return An upper bound on the maximum number of possible matchings, which we use as the max flow value in the algorithm.
+     */
+    inline unsigned get_max_flow_value(const GraphCreator & gc) {
+        //Every pupil can be matched at most once, so the number of pupils is an upper bound on the number of possible matches.
+        unsigned const bound1 = gc.nodes().pupils().size();
+        //The number of matches that are offered by the students is another upper bound:
+        unsigned bound2{0u};
+        for (auto const & student : gc.nodes().college_students()) {
+            bound2 += student.data().number_of_possible_matches;
+        }
+        //we return the smaller of the two bounds:
+        return std::min(bound1, bound2);
+    }
+
     template <typename Func>
     CostValue compute_max_cost_matching_cycle_canceling(const GraphCreator & gc,
                                                         std::map<std::pair<ID, ID>, Graph::edge_descriptor> & edge_to_edge_descriptor,
@@ -76,7 +91,7 @@ namespace CS {
             residual_capacity[rev[t_edge_descriptor]] = 1;
         }
         unsigned const remaining_flow_value =
-                std::min(gc.nodes().pupils().size(), gc.nodes().college_students().size()) - heuristic_edges.size();
+                get_max_flow_value(gc) - heuristic_edges.size();
         ///Add a direct edge between s and t of cost 0 with the remaining flow value:
         add_edge(gc.s_id(), gc.t_id(), 0., remaining_flow_value);
         auto const boost_edge = edge_to_edge_descriptor[{gc.s_id(), gc.t_id()}];
@@ -91,16 +106,18 @@ namespace CS {
 
     template <typename Func>
     CostValue compute_max_cost_matching_successive_shortest_paths(GraphCreator const & gc, Graph & g,
-            Func & add_edge, CostValue additional_cost) {
-        if (gc.nodes().pupils().size() < gc.nodes().college_students().size()) {
+            Func & add_edge, CostValue additional_cost, unsigned max_flow_value) {
+        if (gc.nodes().pupils().size() <= max_flow_value) {
+            //Bound is attained for pupils.
             for (auto const & pupil : gc.nodes().pupils()) {
                 auto pupil_idx = pupil.id();
                 add_edge(pupil_idx, gc.t_id(), additional_cost);
             }
         } else {
+            //Bound is attained for students.
             for (auto const & student : gc.nodes().college_students()) {
                 auto student_idx = student.id() + gc.nodes().pupils().size();
-                add_edge(gc.s_id(), student_idx, additional_cost);
+                add_edge(gc.s_id(), student_idx, additional_cost, student.data().number_of_possible_matches);
             }
         }
         boost::successive_shortest_path_nonnegative_weights(g, gc.s_id(), gc.t_id());
@@ -153,12 +170,12 @@ namespace CS {
         ///Add edges with 0 weight between students and t:
         for (auto const &student : gc.nodes().college_students()) {
             auto const student_index = gc.nodes().pupils().size() + student.id();
-            add_edge(student_index, gc.t_id(), 0.);
+            add_edge(student_index, gc.t_id(), 0., student.data().number_of_possible_matches);
         }
-        unsigned const successive_flow_value = std::min(gc.nodes().pupils().size(), gc.nodes().college_students().size());
+        unsigned const max_flow_value = get_max_flow_value(gc);
         CostValue inverted_flow_cost = (algorithm  == CycleCanceling) ?
                 compute_max_cost_matching_cycle_canceling(gc, edge_to_edge_descriptor, g, rev, residual_capacity, add_edge):
-                compute_max_cost_matching_successive_shortest_paths(gc, g, add_edge, additional_cost) - successive_flow_value * additional_cost;
+                                       compute_max_cost_matching_successive_shortest_paths(gc, g, add_edge, additional_cost, max_flow_value) - max_flow_value * additional_cost;
 
         ///Store the computed matching edges:
         for (auto const & edge: gc.edges()) {

@@ -90,6 +90,7 @@ namespace CS {
         using NodeIF::id;
         struct CollegeStudentData : public NodeIF::DataIF {
             std::vector<OfferedSubject> offered_subjects;
+            unsigned number_of_possible_matches{0u};
         };
 
         inline explicit CollegeStudent(ID id);
