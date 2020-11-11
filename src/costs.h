@@ -21,6 +21,12 @@ namespace CS{
         InvalidCostType
     };
 
+    struct CostComponent {
+        double coefficient{0.};
+        RawCostComponent raw_cost_func;
+        inline explicit CostComponent(double c, RawCostComponent && r): coefficient(c), raw_cost_func(std::move(r)){};
+    };
+
     /**
      * Class that computes the cost of an edge (between a pupil and a college student)
      * This is done by initializing different raw cost components and setting weighting coefficients (1 as default)
@@ -36,8 +42,8 @@ namespace CS{
             CostValue total_edge_cost{0.};
             ///Iterate over all cost components and compute the weighted sum of the costs
             ///by multiplying each raw cost component with its coefficient.
-            for (auto const & [coefficient, raw_cost_component] : cost_components_with_coefficients) {
-                total_edge_cost += coefficient * raw_cost_component(student, pupil);
+            for (auto const & cost_comp : cost_components) {
+                total_edge_cost += cost_comp.coefficient * cost_comp.raw_cost_func(student, pupil);
             }
             return total_edge_cost;
         }
@@ -50,7 +56,7 @@ namespace CS{
             if (it == std::end(cost_component_by_type)) {
                 return 0.;
             } else {
-                return cost_components_with_coefficients[(*it).second].first;
+                return cost_components[(*it).second].coefficient;
             }
         }
 
@@ -63,8 +69,8 @@ namespace CS{
             if (it == std::end(cost_component_by_type)) {
                 return 0.;
             } else {
-                auto & [coefficient, raw_cost_component] = cost_components_with_coefficients[(*it).second];
-                return coefficient * raw_cost_component(student, pupil);
+                auto const & cost_comp= cost_components[(*it).second];
+                return cost_comp.coefficient * cost_comp.raw_cost_func(student, pupil);
             }
         }
 
@@ -78,7 +84,7 @@ namespace CS{
                 throw std::invalid_argument("Tried to change the coefficient of a cost type that was not yet created!");
             }
             //Set the coefficient:
-            cost_components_with_coefficients[cost_component_by_type[type]].first = coefficient;
+            cost_components[cost_component_by_type[type]].coefficient = coefficient;
         }
 
         /**
@@ -160,14 +166,13 @@ namespace CS{
                 throw std::invalid_argument("Tried to add a cost component for a type that already exists!");
             }
             //Store the index of this cost component:
-            cost_component_by_type.emplace(type, cost_components_with_coefficients.size());
+            cost_component_by_type.emplace(type, cost_components.size());
             //Add the cost component
-            cost_components_with_coefficients.emplace_back(coefficient, std::move(cost_component));
+            cost_components.emplace_back(coefficient, std::move(cost_component));
         }
 
         //Container that holds the different cost components which are used ot generate the total cost.
-        //TODO: Rename to cost component
-        std::vector<std::pair<double, RawCostComponent>> cost_components_with_coefficients;
+        std::vector<CostComponent> cost_components;
         //Index map for the different cost components (by type)
         std::map<CostType, ID> cost_component_by_type;
     };
