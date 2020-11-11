@@ -19,6 +19,7 @@
         'sources': [
           'index.cpp',
           'src/graph_creator.cpp',
+          'src/matching.cpp'
         ],
         "cflags!": [ "-fno-exceptions",],
         "cflags_cc!": [ "-fno-exceptions",  ],

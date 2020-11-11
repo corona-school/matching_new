@@ -13,5 +13,5 @@ if(NOT Boost_FOUND)
     message(FATAL_ERROR "Could not find boost!")
 endif()
 
-add_executable(corona_school_matching src/main.cpp src/graph_creator.h src/costs.h src/matching.h src/types.h src/graph_creator.cpp)
+add_executable(corona_school_matching src/main.cpp src/graph_creator.h src/costs.h src/matching.h src/types.h src/graph_creator.cpp src/matching.cpp)
 target_link_libraries(corona_school_matching PRIVATE nlohmann_json::nlohmann_json)
