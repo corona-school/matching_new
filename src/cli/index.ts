@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { exit } from "process";
-import { matchingAlgo } from "../module";
+import matchingAlgo from "../module";
 
 const args = process.argv.slice(2);
 

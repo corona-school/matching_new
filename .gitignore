@@ -5,3 +5,5 @@
 /examples/20_08_2020_Export_2/
 
 /.idea/
+/node_modules
+/build

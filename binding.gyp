@@ -1,7 +1,7 @@
 {
   "variables": {
-    "boost_root%": "C:/Users/danie/CLionProjects/corona_school_matching/boost_includes",
-    "nlohmann_root%": "C:/Users/danie/CLionProjects/corona_school_matching/json-develop"
+    "boost_root%": "./boost_includes",
+    "nlohmann_root%": "./json-develop"
 
   },
     'targets': [
