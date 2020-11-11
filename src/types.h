@@ -17,7 +17,7 @@ namespace CS {
     static constexpr unsigned MAX_POSSIBLE_GRADE{13u};
     static constexpr ID InvalidId{std::numeric_limits<ID>::max()};
     const Subject InvalidSubject{"InvalidSubject"};
-    const Bundesland InvalidBundesland{"InvalidBundesland"};
+    const Bundesland InvalidBundesland{"other"}; ///This is how the input file indicates that the user has not specified the state!
     ///Typedefs for the boost graph that will be created. We need to set all the types explicitly:
     typedef boost::adjacency_list_traits < boost::vecS, boost::vecS, boost::directedS > Traits;
     typedef boost::adjacency_list < boost::vecS, boost::vecS, boost::directedS,
