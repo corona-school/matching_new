@@ -1,7 +1,7 @@
 #include <iostream>
 #include "graph_creator.h"
 #include "matching.h"
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 #include "stats.h"
 using json = nlohmann::json;
 

@@ -1,7 +1,7 @@
 #include "matching.h"
-#include "../boost_includes/boost/graph/cycle_canceling.hpp"
-#include "../boost_includes/boost/graph/successive_shortest_path_nonnegative_weights.hpp"
-#include "../boost_includes/boost/graph/find_flow_cost.hpp"
+#include <boost/graph/cycle_canceling.hpp>
+#include <boost/graph/successive_shortest_path_nonnegative_weights.hpp>
+#include <boost/graph/find_flow_cost.hpp>
 
 namespace CS {
    /**

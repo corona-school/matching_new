@@ -1,9 +1,58 @@
-# Project exclude paths
-/cmake-build-debug/
-/cmake-build-release/
-/examples/13_10_2020_18_53_39/
-/examples/20_08_2020_Export_2/
+######
+###### Typescript / Node stuff
+######
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.swp
 
-/.idea/
-/node_modules
-/build
+pids
+logs
+results
+tmp
+
+# Coverage reports
+coverage
+
+# API keys and secrets
+.env
+
+# Dependency directory
+node_modules
+bower_components
+
+# Editors
+.idea
+*.iml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+######
+###### VSCode stuff
+######
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+
+######
+###### Project specific gitignore
+######
+# Ignore build folder
+build/**/*
+# Ignore dist/lib folder
+dist/**/*
+lib/**/*
+# Ignore output folder that is likely to be used as the output folder of the matching algorithm (at least the example uses it)
+output/**/*

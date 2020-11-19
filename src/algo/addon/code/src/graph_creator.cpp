@@ -1,6 +1,6 @@
 #include <iostream>
 #include "graph_creator.h"
-#include "nlohmann/json.hpp"
+#include <nlohmann/json.hpp>
 #include <algorithm>
 #include <iomanip>
 

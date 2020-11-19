@@ -6,7 +6,7 @@
 
 #include <napi.h>
 
-#include "src/algo.h"
+#include <algo.h>
 
 /// The number of arguments expected by the matching algorithm
 #define MATCH_ALGO_ARG_COUNT 5
@@ -67,7 +67,12 @@ Napi::Value Match(const Napi::CallbackInfo& info) {
     std::string arg4 = info[4].As<Napi::String>();
 
     //perform the algorithm
-    CS::perform_algo_with_file_names(arg0.c_str(), arg1.c_str(), arg2.c_str(), arg3.c_str(), arg4.c_str());
+    try {
+        CS::perform_algo_with_file_names(arg0.c_str(), arg1.c_str(), arg2.c_str(), arg3.c_str(), arg4.c_str());
+    }
+    catch (...) {
+        Napi::Error::New(env, "The actual matching failed due to a C++ exception!").ThrowAsJavaScriptException();
+    }
     return env.Null();
 }
 
