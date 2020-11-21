@@ -1,230 +1,197 @@
 [
-  [
-    "Number of students",
-    1000
-  ],
-  [
-    "Number of pupils",
-    1000
-  ],
-  [
-    "Total number of edges in the graph",
-    604987
-  ],
-  [
-    "Total number of found matches",
-    991
-  ],
-  [
-    "Matching Cost:",
-    380517.9394655288
-  ],
-  [
-    "Average waiting days of a matched pupil",
-    124.81803405417284
-  ],
-  [
-    "Most waiting days of an unmatched pupil",
-    66.58184027777777
-  ],
-  [
-    "Total number of covered subjects",
-    2209
-  ],
-  [
-    "Total number of uncovered subjects",
-    153
-  ],
-  [
-    "Total number of offered subjects",
-    3793
-  ],
-  [
-    "Total number of matching edges with matching bundesland",
-    47
-  ],
-  [
-    "Deutsch",
-    {
-      "offered": 523,
-      "requested": 475,
-      "requests fulfilled": 457
-    }
-  ],
-  [
-    "Mathematik",
-    {
-      "offered": 597,
-      "requested": 631,
-      "requests fulfilled": 585
-    }
-  ],
-  [
-    "Englisch",
-    {
-      "offered": 556,
-      "requested": 423,
-      "requests fulfilled": 421
-    }
-  ],
-  [
-    "Physik",
-    {
-      "offered": 179,
-      "requested": 110,
-      "requests fulfilled": 89
-    }
-  ],
-  [
-    "Chemie",
-    {
-      "offered": 172,
-      "requested": 98,
-      "requests fulfilled": 90
-    }
-  ],
-  [
-    "Biologie",
-    {
-      "offered": 244,
-      "requested": 107,
-      "requests fulfilled": 105
-    }
-  ],
-  [
-    "Informatik",
-    {
-      "offered": 94,
-      "requested": 27,
-      "requests fulfilled": 21
-    }
-  ],
-  [
-    "Französisch",
-    {
-      "offered": 139,
-      "requested": 128,
-      "requests fulfilled": 116
-    }
-  ],
-  [
-    "Spanisch",
-    {
-      "offered": 90,
-      "requested": 56,
-      "requests fulfilled": 53
-    }
-  ],
-  [
-    "Latein",
-    {
-      "offered": 62,
-      "requested": 67,
-      "requests fulfilled": 54
-    }
-  ],
-  [
-    "Erdkunde",
-    {
-      "offered": 134,
-      "requested": 40,
-      "requests fulfilled": 39
-    }
-  ],
-  [
-    "Geschichte",
-    {
-      "offered": 228,
-      "requested": 59,
-      "requests fulfilled": 55
-    }
-  ],
-  [
-    "Wirtschaft",
-    {
-      "offered": 182,
-      "requested": 24,
-      "requests fulfilled": 21
-    }
-  ],
-  [
-    "Politik",
-    {
-      "offered": 209,
-      "requested": 25,
-      "requests fulfilled": 25
-    }
-  ],
-  [
-    "Philosophie",
-    {
-      "offered": 97,
-      "requested": 8,
-      "requests fulfilled": 8
-    }
-  ],
-  [
-    "Musik",
-    {
-      "offered": 78,
-      "requested": 41,
-      "requests fulfilled": 37
-    }
-  ],
-  [
-    "Kunst",
-    {
-      "offered": 72,
-      "requested": 23,
-      "requests fulfilled": 21
-    }
-  ],
-  [
-    "Pädagogik",
-    {
-      "offered": 87,
-      "requested": 3,
-      "requests fulfilled": 3
-    }
-  ],
-  [
-    "Religion",
-    {
-      "offered": 2,
-      "requested": 2,
-      "requests fulfilled": 1
-    }
-  ],
-  [
-    "Altgriechisch",
-    {
-      "offered": 11,
-      "requested": 2,
-      "requests fulfilled": 1
-    }
-  ],
-  [
-    "Italienisch",
-    {
-      "offered": 20,
-      "requested": 2,
-      "requests fulfilled": 0
-    }
-  ],
-  [
-    "Russisch",
-    {
-      "offered": 11,
-      "requested": 10,
-      "requests fulfilled": 7
-    }
-  ],
-  [
-    "Niederländisch",
-    {
-      "offered": 6,
-      "requested": 1,
-      "requests fulfilled": 0
-    }
-  ]
+    ["Number of students", 1000],
+    ["Number of pupils", 1000],
+    ["Total number of edges in the graph", 604987],
+    ["Total number of found matches", 991],
+    ["Matching Cost:", 380517.9394655288],
+    ["Average waiting days of a matched pupil", 124.81803405417284],
+    ["Most waiting days of an unmatched pupil", 66.58184027777777],
+    ["Total number of covered subjects", 2209],
+    ["Total number of uncovered subjects", 153],
+    ["Total number of offered subjects", 3793],
+    ["Total number of matching edges with matching bundesland", 47],
+    [
+        "Deutsch",
+        {
+            "offered": 523,
+            "requested": 475,
+            "requests fulfilled": 457
+        }
+    ],
+    [
+        "Mathematik",
+        {
+            "offered": 597,
+            "requested": 631,
+            "requests fulfilled": 585
+        }
+    ],
+    [
+        "Englisch",
+        {
+            "offered": 556,
+            "requested": 423,
+            "requests fulfilled": 421
+        }
+    ],
+    [
+        "Physik",
+        {
+            "offered": 179,
+            "requested": 110,
+            "requests fulfilled": 89
+        }
+    ],
+    [
+        "Chemie",
+        {
+            "offered": 172,
+            "requested": 98,
+            "requests fulfilled": 90
+        }
+    ],
+    [
+        "Biologie",
+        {
+            "offered": 244,
+            "requested": 107,
+            "requests fulfilled": 105
+        }
+    ],
+    [
+        "Informatik",
+        {
+            "offered": 94,
+            "requested": 27,
+            "requests fulfilled": 21
+        }
+    ],
+    [
+        "Französisch",
+        {
+            "offered": 139,
+            "requested": 128,
+            "requests fulfilled": 116
+        }
+    ],
+    [
+        "Spanisch",
+        {
+            "offered": 90,
+            "requested": 56,
+            "requests fulfilled": 53
+        }
+    ],
+    [
+        "Latein",
+        {
+            "offered": 62,
+            "requested": 67,
+            "requests fulfilled": 54
+        }
+    ],
+    [
+        "Erdkunde",
+        {
+            "offered": 134,
+            "requested": 40,
+            "requests fulfilled": 39
+        }
+    ],
+    [
+        "Geschichte",
+        {
+            "offered": 228,
+            "requested": 59,
+            "requests fulfilled": 55
+        }
+    ],
+    [
+        "Wirtschaft",
+        {
+            "offered": 182,
+            "requested": 24,
+            "requests fulfilled": 21
+        }
+    ],
+    [
+        "Politik",
+        {
+            "offered": 209,
+            "requested": 25,
+            "requests fulfilled": 25
+        }
+    ],
+    [
+        "Philosophie",
+        {
+            "offered": 97,
+            "requested": 8,
+            "requests fulfilled": 8
+        }
+    ],
+    [
+        "Musik",
+        {
+            "offered": 78,
+            "requested": 41,
+            "requests fulfilled": 37
+        }
+    ],
+    [
+        "Kunst",
+        {
+            "offered": 72,
+            "requested": 23,
+            "requests fulfilled": 21
+        }
+    ],
+    [
+        "Pädagogik",
+        {
+            "offered": 87,
+            "requested": 3,
+            "requests fulfilled": 3
+        }
+    ],
+    [
+        "Religion",
+        {
+            "offered": 2,
+            "requested": 2,
+            "requests fulfilled": 1
+        }
+    ],
+    [
+        "Altgriechisch",
+        {
+            "offered": 11,
+            "requested": 2,
+            "requests fulfilled": 1
+        }
+    ],
+    [
+        "Italienisch",
+        {
+            "offered": 20,
+            "requested": 2,
+            "requests fulfilled": 0
+        }
+    ],
+    [
+        "Russisch",
+        {
+            "offered": 11,
+            "requested": 10,
+            "requests fulfilled": 7
+        }
+    ],
+    [
+        "Niederländisch",
+        {
+            "offered": 6,
+            "requested": 1,
+            "requests fulfilled": 0
+        }
+    ]
 ]

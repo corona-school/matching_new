@@ -29,8 +29,7 @@ const stats_output = args[4];
 try {
     matchingAlgo(pupil_input_file, student_input_file, balancing_coefficients, matching_output, stats_output);
     console.log(`Matching results written to ${matching_output}\n`);
-}
-catch (e) {
+} catch (e) {
     console.log(`🚨 A problem occurred...\n${e}\n`);
     exit(1);
 }
