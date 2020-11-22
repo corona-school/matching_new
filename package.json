@@ -1,5 +1,5 @@
 {
-    "name": "corona_school_matching",
+    "name": "corona-school-matching",
     "version": "1.0.0",
     "description": "The brand new, more generic matching algorithm used by Corona School.",
     "main": "lib/addon/index.js",
