@@ -2,8 +2,8 @@
     "name": "corona-school-matching",
     "version": "1.0.0",
     "description": "The brand new, more generic matching algorithm used by Corona School.",
-    "main": "lib/addon/index.js",
-    "types": "lib/addon/index.d.ts",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
     "scripts": {
         "buildTS": "tsc",
         "buildCPP": "node-gyp rebuild",
