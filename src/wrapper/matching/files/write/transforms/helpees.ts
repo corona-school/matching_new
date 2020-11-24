@@ -15,7 +15,7 @@ export function helpeeTransform(helpee: Helpee): HelpeeInputFormat {
         grade: helpee.grade,
         matchingPriority: helpee.matchingPriority,
         numberOfOpenMatchRequests: helpee.matchRequestCount,
-        hasDissolvedMatchesWith: helpee.dissolvedMatches,
+        hasDissolvedMatchesWith: helpee.excludeMatchesWith,
         subjects: helpee.subjects.map(helpeeTransformSubject)
     };
 }

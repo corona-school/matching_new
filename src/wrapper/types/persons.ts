@@ -10,7 +10,7 @@ export interface Person extends PersonID {
     state: string;
     matchRequestCount: number;
     subjects: Subject[];
-    dissolvedMatches: PersonID[];
+    excludeMatchesWith: PersonID[];
 }
 
 export interface Helper extends Person {

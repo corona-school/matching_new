@@ -60,9 +60,9 @@ test("A single subject name is empty", t => {
     t.end();
 });
 
-test("No matches due to dissolvedMatches", t => {
-    const helperANew: Helper = { ...TestData.helperA, dissolvedMatches: [{ uuid: TestData.helpeeA.uuid }] };
-    const helpeeANew: Helpee = { ...TestData.helpeeA, dissolvedMatches: [{ uuid: TestData.helperA.uuid }] }; //note: both need to have the dissolved matches property!
+test("No matches due to excludeMatchesWith", t => {
+    const helperANew: Helper = { ...TestData.helperA, excludeMatchesWith: [{ uuid: TestData.helpeeA.uuid }] };
+    const helpeeANew: Helpee = { ...TestData.helpeeA, excludeMatchesWith: [{ uuid: TestData.helperA.uuid }] }; //note: both need to have the excludeMatchesWith property!
     const result = match([helperANew], [helpeeANew]);
     t.deepEqual(result.matches, []);
 

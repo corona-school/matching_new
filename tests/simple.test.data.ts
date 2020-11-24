@@ -11,7 +11,7 @@ export const helperA: Helper = {
     createdAt: new Date(),
     state: "nw",
     matchRequestCount: 1,
-    dissolvedMatches: [],
+    excludeMatchesWith: [],
     subjects: [
         {
             name: "Deutsch",
@@ -37,7 +37,7 @@ export const helpeeA: Helpee = {
     grade: 4,
     matchRequestCount: 1,
     matchingPriority: 10,
-    dissolvedMatches: [],
+    excludeMatchesWith: [],
     subjects: [
         {
             name: "Deutsch"
@@ -54,7 +54,7 @@ export const helperB: Helper = {
     createdAt: new Date(),
     state: "nw",
     matchRequestCount: 1,
-    dissolvedMatches: [],
+    excludeMatchesWith: [],
     subjects: [
         {
             name: "Englisch",
@@ -80,7 +80,7 @@ export const helpeeC: Helpee = {
     grade: 8,
     matchRequestCount: 1,
     matchingPriority: 1,
-    dissolvedMatches: [],
+    excludeMatchesWith: [],
     subjects: [
         {
             name: "Deutsch"
@@ -97,7 +97,7 @@ export const helperWithOneSubjectA: Helper = {
     createdAt: new Date(),
     state: "nw",
     matchRequestCount: 1,
-    dissolvedMatches: [],
+    excludeMatchesWith: [],
     subjects: [
         {
             name: "Deutsch",
@@ -116,7 +116,7 @@ export const helpeeWithOneSubjectA: Helpee = {
     grade: 1,
     matchRequestCount: 1,
     matchingPriority: 1,
-    dissolvedMatches: [],
+    excludeMatchesWith: [],
     subjects: [
         {
             name: "Deutsch"
@@ -131,7 +131,7 @@ export const unmatchableHelper1: Helper = {
     createdAt: new Date(),
     state: "nw",
     matchRequestCount: 1,
-    dissolvedMatches: [],
+    excludeMatchesWith: [],
     subjects: [
         {
             name: "",
@@ -159,7 +159,7 @@ export const unmatchableHelpee1: Helpee = {
     grade: 4,
     matchRequestCount: 1,
     matchingPriority: 1,
-    dissolvedMatches: [],
+    excludeMatchesWith: [],
     subjects: [
         {
             name: "Altgriechisch"
@@ -178,7 +178,7 @@ export const helpeeWithOneEmptySubjectName1: Helpee = {
     grade: 4,
     matchRequestCount: 1,
     matchingPriority: 1,
-    dissolvedMatches: [],
+    excludeMatchesWith: [],
     subjects: [
         {
             name: ""

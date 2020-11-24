@@ -14,7 +14,7 @@ export function helperTransform(helper: Helper): HelperInputFormat {
         createdAt: helper.createdAt,
         state: helper.state,
         numberOfOpenMatchRequests: helper.matchRequestCount,
-        hasDissolvedMatchesWith: helper.dissolvedMatches,
+        hasDissolvedMatchesWith: helper.excludeMatchesWith,
         subjects: helper.subjects.map(helperTransformSubject)
     };
 }
