@@ -26,7 +26,7 @@ namespace CS {
             pupil_matches[edge.pupil_id]++;
             student_matches[edge.college_student_id]++;
             //Check that pupil and student accept each other.
-            if (gc.is_possible_pairing(student.id(), pupil.id())) {
+            if (not gc.is_possible_pairing(student.id(), pupil.id())) {
                 //TODO: Throw exceptions or write into log file.
                 std::cout<<"ERROR, MATCHING CONTAINS AN EDGE THAT SHOULD NOT EXIST!"<<std::endl;
                 break;
