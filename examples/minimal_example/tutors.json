@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "createdAt": "2020-11-08T11:42:58.579Z",
+    "state": "be",
+    "isActive": true,
+    "uuid": "109404d6-4bdf-4ad2-91fb-b9e239ce3681",
+    "hasDissolvedMatchesWith": [],
+    "subjects": [
+      {
+        "name": "Latein",
+        "grade": {
+          "min": 1,
+          "max": 8
+        }
+      },
+      {
+        "name": "Chemie",
+        "grade": {
+          "min": 1,
+          "max": 8
+        }
+      },
+      {
+        "name": "Englisch",
+        "grade": {
+          "min": 1,
+          "max": 10
+        }
+      }
+    ],
+    "numberOfOpenMatchRequests": 1
+  },
+  {
+    "id": 2,
+    "createdAt": "2020-10-24T13:24:10.485Z",
+    "state": "other",
+    "isActive": true,
+    "uuid": "13fca4b4-3613-4d51-8fe4-d02fa0c18355",
+    "hasDissolvedMatchesWith": [],
+    "subjects": [
+      {
+        "name": "Mathematik",
+        "grade": {
+          "min": 7,
+          "max": 13
+        }
+      },
+      {
+        "name": "Englisch",
+        "grade": {
+          "min": 7,
+          "max": 10
+        }
+      },
+      {
+        "name": "Physik",
+        "grade": {
+          "min": 7,
+          "max": 10
+        }
+      },
+      {
+        "name": "Russisch",
+        "grade": {
+          "min": 7,
+          "max": 13
+        }
+      }
+    ],
+    "numberOfOpenMatchRequests": 2
+  },
+  {
+    "id": 3,
+    "createdAt": "2020-09-29T20:22:07.824Z",
+    "state": "nw",
+    "isActive": true,
+    "uuid": "d2fb152b-3576-44b0-a4f4-ab2f75e13164",
+    "hasDissolvedMatchesWith": [],
+    "subjects": [
+      {
+        "name": "Mathematik",
+        "grade": {
+          "min": 1,
+          "max": 13
+        }
+      },
+      {
+        "name": "Physik",
+        "grade": {
+          "min": 1,
+          "max": 13
+        }
+      }
+    ],
+    "numberOfOpenMatchRequests": 1
+  }
+]

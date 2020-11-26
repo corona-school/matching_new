@@ -1,0 +1,94 @@
+[
+  [
+    "Number of students",
+    3
+  ],
+  [
+    "Number of pupils",
+    3
+  ],
+  [
+    "Total number of edges in the graph",
+    6
+  ],
+  [
+    "Total number of found matches",
+    3
+  ],
+  [
+    "Matching Cost:",
+    165.01402019676425
+  ],
+  [
+    "Average waiting days of a matched pupil",
+    11.83753086419753
+  ],
+  [
+    "Most waiting days of an unmatched pupil",
+    0.0
+  ],
+  [
+    "Total number of covered subjects",
+    7
+  ],
+  [
+    "Total number of uncovered subjects",
+    1
+  ],
+  [
+    "Total number of offered subjects",
+    9
+  ],
+  [
+    "Total number of matching edges with matching bundesland",
+    1
+  ],
+  [
+    "Chemie",
+    {
+      "offered": 1,
+      "requested": 1,
+      "requests fulfilled": 1
+    }
+  ],
+  [
+    "Englisch",
+    {
+      "offered": 2,
+      "requested": 2,
+      "requests fulfilled": 2
+    }
+  ],
+  [
+    "Latein",
+    {
+      "offered": 1,
+      "requested": 1,
+      "requests fulfilled": 1
+    }
+  ],
+  [
+    "Mathematik",
+    {
+      "offered": 2,
+      "requested": 2,
+      "requests fulfilled": 1
+    }
+  ],
+  [
+    "Physik",
+    {
+      "offered": 2,
+      "requested": 1,
+      "requests fulfilled": 1
+    }
+  ],
+  [
+    "Russisch",
+    {
+      "offered": 1,
+      "requested": 1,
+      "requests fulfilled": 1
+    }
+  ]
+]
