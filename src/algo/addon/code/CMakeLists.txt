@@ -7,7 +7,7 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 include_directories("json-develop")
 
 find_package(Boost 1.73.0 REQUIRED)
-add_subdirectory(json-develop)
+add_subdirectory(external/json)
 
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Could not find boost!")
