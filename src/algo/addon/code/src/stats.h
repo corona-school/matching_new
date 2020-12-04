@@ -103,11 +103,11 @@ namespace CS {
         std::map<Subject, unsigned> num_subject_requested;
         std::map<Subject, unsigned> num_subject_request_fulfilled;
         collect_subject_requests_offers(gc, num_subject_requested, num_subject_offered);
-        output_json.push_back({"Number of students", gc.nodes().college_students().size()});
-        output_json.push_back({"Number of pupils", gc.nodes().pupils().size()});
-        output_json.push_back({"Total number of edges in the graph", gc.edges().size()});
-        output_json.push_back({"Total number of found matches", matching_edges.size()});
-        output_json.push_back({"Matching Cost:", matching_cost});
+        output_json["Number of students"] =  gc.nodes().college_students().size();
+        output_json["Number of pupils"] = gc.nodes().pupils().size();
+        output_json["Total number of edges in the graph"] = gc.edges().size();
+        output_json["Total number of found matches"] = matching_edges.size();
+        output_json["Matching Cost:"] = matching_cost;
         ///Costs by component
         CostValue bundesland_cost = 0.;
         CostValue fach_cost = 0.;
@@ -144,15 +144,15 @@ namespace CS {
         for (auto const &[key, val] : num_subject_offered) {
             num_offered_subjects+= val;
         }
-        output_json.push_back({"Average waiting days of a matched pupil", avg_pupil_waiting_days});
-        output_json.push_back({"Most waiting days of an unmatched pupil", most_waiting_days});
-        output_json.push_back({"Total number of covered subjects", num_cov_subjects});
-        output_json.push_back({"Total number of uncovered subjects", num_uncov_sub});
-        output_json.push_back({"Total number of offered subjects", num_offered_subjects});
-        output_json.push_back({"Total number of matching edges with matching bundesland", num_bund_match});
+        output_json["Average waiting days of a matched pupil"] =  avg_pupil_waiting_days;
+        output_json["Most waiting days of an unmatched pupil"] = most_waiting_days;
+        output_json["Total number of covered subjects"] = num_cov_subjects;
+        output_json["Total number of uncovered subjects"] = num_uncov_sub;
+        output_json["Total number of offered subjects"] = num_offered_subjects;
+        output_json["Total number of matching edges with matching bundesland"] = num_bund_match;
         for (auto const & [key, val] : num_subject_offered) {
-            output_json.push_back({key, {{"offered", val}, {"requested", num_subject_requested[key]},
-                                                            {"requests fulfilled", num_subject_request_fulfilled[key]}}});
+            output_json[key] =  {{"offered", val}, {"requested", num_subject_requested[key]},
+                                                            {"requests fulfilled", num_subject_request_fulfilled[key]}};
         }
         std::ofstream out(file_name);
         out<<output_json;
