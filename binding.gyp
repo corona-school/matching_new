@@ -1,3 +1,4 @@
+# Looking into https://github.com/nodejs/node/blob/master/common.gypi can help when searching for the correct compiler settings
 {
   'variables': {
     # Putting a variables dict inside another variables dict looks kind of
@@ -41,6 +42,7 @@
       'cflags_cc!': [ '-fno-exceptions',  ],
       'cflags_cc': [
         '-std=c++17' , # use c++17
+        '-w', # do not show warnings (from boost etc.)
       ],
       'linkflags': [
       '-lstdc++fs -lc++fs -ld',
@@ -63,6 +65,7 @@
             'MACOSX_DEPLOYMENT_TARGET': '10.15',
             'CLANG_CXX_LANGUAGE_STANDARD': 'c++17',
             'CLANG_CXX_LIBRARY': 'libc++',
+            'WARNING_CFLAGS!': ['-Wall', '-Wextra'],
           },
         }],
         ['OS=="win"', {
