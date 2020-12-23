@@ -107,7 +107,7 @@ namespace CS {
         output_json["Number of pupils"] = gc.nodes().pupils().size();
         output_json["Total number of edges in the graph"] = gc.edges().size();
         output_json["Total number of found matches"] = matching_edges.size();
-        output_json["Matching Cost:"] = matching_cost;
+        output_json["Matching Cost"] = matching_cost;
         ///Costs by component
         CostValue bundesland_cost = 0.;
         CostValue fach_cost = 0.;
@@ -151,8 +151,15 @@ namespace CS {
         output_json["Total number of offered subjects"] = num_offered_subjects;
         output_json["Total number of matching edges with matching bundesland"] = num_bund_match;
         for (auto const & [key, val] : num_subject_offered) {
-            output_json[key] =  {{"offered", val}, {"requested", num_subject_requested[key]},
-                                                            {"requests fulfilled", num_subject_request_fulfilled[key]}};
+            output_json["subjects"].push_back({
+                {"name", key}, 
+                {"stats", {
+                            {"offered", val}, 
+                            {"requested", num_subject_requested[key]},
+                            {"requests fulfilled", num_subject_request_fulfilled[key]}
+                        }
+                }
+            });
         }
         std::ofstream out(file_name);
         out<<output_json;
