@@ -5,7 +5,7 @@ export interface Stats {
     matchCount: number;
     matchingCost: number;
     averageWaitingDaysMatchedHelpee: number;
-    averageWaitingDaysUnmatchedHelpee: number;
+    mostWaitingDaysUnmatchedHelpee: number;
     numberOfCoveredSubjects: number;
     numberOfUncoveredSubjects: number;
     numberOfOfferedSubjects: number;
