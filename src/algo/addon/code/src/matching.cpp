@@ -178,4 +178,75 @@ namespace CS {
         ///Invert the flow cost, because we computed a min cost flow for the negative costs.
         return  -inverted_flow_cost;
     }
+
+    double maximum_applicant_score(std::vector<CourseApplicant> const & applicants) {
+        double maximum_score{0.};
+        for (auto const & applicant : applicants) {
+            maximum_score = std::max(maximum_score, applicant.score);
+        }
+        return maximum_score;
+    }
+
+    CostValue compute_course_assignment(CourseApplicantContainer & applicant_container,
+                                        CourseContainer const & course_container) {
+        ID const s_id = applicant_container.applicants.size() + course_container.courses.size();
+        ID const t_id = s_id + 1;
+        ///Initialize edge weights, capacities, residual capacities and the boost graph
+        Graph g(t_id + 1);
+        boost::property_map<Graph, boost::edge_capacity_t>::type capacity = boost::get(boost::edge_capacity, g);
+        boost::property_map<Graph, boost::edge_residual_capacity_t>::type
+                residual_capacity = get(boost::edge_residual_capacity, g);
+        boost::property_map<Graph, boost::edge_reverse_t>::type rev = get(boost::edge_reverse, g);
+        boost::property_map<Graph, boost::edge_weight_t>::type weight = get(boost::edge_weight, g);
+        std::map<std::pair<ID, ID>, Graph::edge_descriptor> edge_to_edge_descriptor;
+        //Just a large enough constant
+        CostValue additional_cost = 2 * maximum_applicant_score(applicant_container.applicants);
+        ///Lambda function to add an edge in the boost graph (with its residual edge, weight and capacity).
+        ///This way we avoid duplicate code. (capacity of the edge is set to 1 as default)
+        auto add_edge = [&](ID tail, ID head, double cost, unsigned cap = 1) {
+            auto const edge_descriptor = boost::add_edge(tail, head, g).first;
+            auto const reverse_edge_descriptor = boost::add_edge(head, tail, g).first;
+            rev[edge_descriptor] = reverse_edge_descriptor;
+            rev[reverse_edge_descriptor] = edge_descriptor;
+            capacity[edge_descriptor] = cap;
+            capacity[reverse_edge_descriptor] = 0;
+            weight[edge_descriptor] = static_cast<int>(cost);
+            //Cost of the reverse edge must be inverted!
+            weight[reverse_edge_descriptor] = -static_cast<int>(cost);
+            residual_capacity[edge_descriptor] = cap;
+            residual_capacity[reverse_edge_descriptor] = 0;
+            edge_to_edge_descriptor[{tail, head}] = edge_descriptor;
+            return edge_descriptor;
+        };
+        ID applicant_index{0};
+        for (auto const &applicant : applicant_container.applicants) {
+            //Capacity large enough
+            add_edge(s_id, applicant_index, additional_cost - applicant.score, applicant.requested_courses.size());
+            for (auto course_id : applicant.requested_courses) {
+                ID course_index = course_id + applicant_container.applicants.size();
+                add_edge(applicant_index, course_index, 0.);
+            }
+            ++applicant_index;
+        }
+        ID course_index = applicant_container.applicants.size();
+        for (auto const &course : course_container.courses) {
+            add_edge(course_index, t_id, 0.);
+            ++course_index;
+        }
+        boost::successive_shortest_path_nonnegative_weights(g, s_id, t_id);
+        ///TODO: recover the correct flow cost
+        CostValue flow_cost = boost::find_flow_cost(g);
+
+        applicant_index = 0;
+        for (auto & applicant : applicant_container.applicants) {
+            for (auto course_id : applicant.requested_courses) {
+                course_index = course_id + applicant_container.applicants.size();
+                if (residual_capacity[edge_to_edge_descriptor[{applicant_index,course_index}]] == 0){
+                    applicant.assigned_course_ids.push_back(course_id);
+                }
+            }
+            ++applicant_index;
+        }
+        return flow_cost;
+    }
 }

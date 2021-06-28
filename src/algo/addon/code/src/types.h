@@ -6,6 +6,10 @@
 #include <memory>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
+#include <nlohmann/json.hpp>
+#include <fstream>
+#include <ctime>
+#include <iomanip>
 
 namespace CS {
 
@@ -199,6 +203,109 @@ namespace CS {
     };
 
     CollegeStudent::CollegeStudent(ID id) : NodeIF(id) {}
+
+    struct TimeInterval {
+        double start;
+        double end;
+
+        bool intersects(const TimeInterval & other) const {
+            return  !(start >= other.end or end <= other.start);
+        }
+    };
+
+    struct Schedule {
+        std::vector<TimeInterval> times;
+
+        bool has_conflict_with(const Schedule & other) const {
+            for (auto const & time_interval :  times) {
+                for (auto const & other_time_interval : other.times) {
+                    if (time_interval.intersects(other_time_interval)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    };
+
+    struct Course {
+        const unsigned max_number_of_participants{0u};
+        const std::string name;
+        const Schedule schedule;
+    };
+
+    struct CourseApplicant {
+        std::vector<ID> requested_courses;
+        //Referring to previous courses here:
+        const unsigned number_of_skipped_courses{0u};
+        const unsigned number_of_denied_courses{0u};
+        const unsigned number_of_accepted_courses{0u};
+        std::string const uuid;
+        std::vector<ID> assigned_course_ids;
+        double score{0.};
+
+        explicit CourseApplicant(unsigned n_skipped_courses, unsigned n_denied_courses, unsigned n_accepted_courses, std::string UUID):
+        number_of_skipped_courses(n_skipped_courses), number_of_denied_courses(n_denied_courses),
+        number_of_accepted_courses(n_accepted_courses), uuid(UUID) {}
+    };
+
+    inline double get_day_difference_from_today(const std::string &date) {
+        static constexpr unsigned SECONDS_IN_A_DAY = 86400;
+        //Get time now
+        std::time_t now = std::time(nullptr);
+        //Convert string into time_t
+        std::tm t = {};
+        std::istringstream ss(date);
+        ss >> std::get_time(&t, "%Y-%m-%dT%H:%M:%S");
+        //Compute the time difference
+        return std::difftime(now, std::mktime(&t)) / SECONDS_IN_A_DAY;
+    }
+
+    struct CourseContainer {
+        std::vector<Course> courses;
+
+        void init_from_json(std::string const & filename) {
+            std::ifstream input_file(filename.c_str());
+            nlohmann::json input_json;
+            input_file >> input_json;
+            for (auto const & entry : input_json) {
+                Schedule current_schedule;
+                for (auto const & time_entry: entry["schedule"]) {
+                    TimeInterval time_interval;
+                    time_interval.start = get_day_difference_from_today(time_entry["start"]);
+                    ////a minute is 1/(24*60) of a day
+                    time_interval.end = time_interval.start + static_cast<double>(time_entry["duration"]) / (24 * 60) ;
+                    current_schedule.times.push_back(time_interval);
+                }
+                courses.push_back({entry["maxNumberOfParticipants"], entry["name"], current_schedule });
+            }
+        }
+    };
+
+    struct CourseApplicantContainer {
+        std::vector<CourseApplicant> applicants;
+
+        void init_from_json(std::string const & filename, std::vector<Course> const & courses) {
+            std::ifstream input_file(filename.c_str());
+            nlohmann::json input_json;
+            input_file >> input_json;
+            for (auto const & entry : input_json) {
+                CourseApplicant applicant(entry["NumberOfSkippedCourses"], entry["NumberOfDeniedCourses"], entry["NumberOfAcceptedCourses"], entry["uuid"]);
+                for (auto const & requested_course : entry["requestedCourses"]) {
+                    //get the id of the course:
+                    ID course_id = 0;
+                    for (auto const & course : courses) {
+                        if (course.name == requested_course) {
+                            applicant.requested_courses.push_back(course_id);
+                            break;
+                        }
+                        course_id++;
+                    }
+                }
+                applicants.push_back(applicant);
+            }
+        }
+    };
 } // namespace CS
 
 #endif //CORONA_SCHOOL_MATCHING_TYPES_H

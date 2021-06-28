@@ -20,17 +20,6 @@ namespace CS {
         return InvalidCostType;
     }
 
-    double get_day_difference_from_today(const std::string &date) {
-        static constexpr unsigned SECONDS_IN_A_DAY = 86400;
-        //Get time now
-        std::time_t now = std::time(nullptr);
-        //Convert string into time_t
-        std::tm t = {};
-        std::istringstream ss(date);
-        ss >> std::get_time(&t, "%Y-%m-%dT%H:%M:%S");
-        //Compute the time difference
-        return std::difftime(now, std::mktime(&t)) / SECONDS_IN_A_DAY;
-    }
 
     template <typename T>
     inline bool contains(const std::vector<T> &vec, T const &elem) {

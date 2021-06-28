@@ -6,43 +6,19 @@
 using json = nlohmann::json;
 
 
-std::vector<std::string> get_uuids_of_pupils(std::ifstream & pupils_file) {
-    std::vector<std::string> retval;
-    std::string line;
-    std::string token;
-    std::getline(pupils_file, line);
-    std::istringstream ss(line);
-    getline(ss, token, ',');
-    while(getline(ss, token, ',')){ }
 
-    while(std::getline(pupils_file, line)) {
-        std::istringstream lol(line);
-        std::string tokenbeard;
-        getline(lol, tokenbeard, ',');
-        retval.push_back(tokenbeard);
-        while (getline(lol, token, ',')) {}
-    }
-    return retval;
+
+
+void run_course_assignment(std::string const & course_input_file_name, std::string const & applicant_file_name,
+                           std::string const & output_file_name) {
+    CS::CourseContainer course_container;
+    CS::CourseApplicantContainer applicant_container;
+    course_container.init_from_json(course_input_file_name);
+    applicant_container.init_from_json(applicant_file_name, course_container.courses);
+    CS::compute_course_assignment(applicant_container, course_container);
+    CS::dump_course_assignment(output_file_name, applicant_container.applicants, course_container.courses);
 }
 
-std::vector<std::string> get_uuids_of_students(std::ifstream & pupils_file) {
-    std::vector<std::string> retval;
-    std::string line;
-    std::string token;
-    std::getline(pupils_file, line);
-    std::istringstream ss(line);
-    getline(ss, token, ',');
-    while(getline(ss, token, ',')){ }
-
-    while (std::getline(pupils_file, line)) {
-        std::istringstream lol(line);
-        std::string tokenbeard;
-        getline(lol, tokenbeard, ',');
-        retval.push_back(tokenbeard);
-        while (getline(lol, tokenbeard, ',')) {}
-    }
-    return retval;
-}
 int main(int argc, char * argv[]) {
     //READ DATA AND CONSTRUCT GRAPH
     if (argc != 6) {

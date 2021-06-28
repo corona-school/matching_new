@@ -10,6 +10,10 @@ namespace CS{
     ///Raw Cost Components are functions returning an unweighted cost between a student and a pupil.
     using RawCostComponent = std::function<CostValue(const CollegeStudent & student, const Pupil & pupil)>;
 
+    static constexpr double skipped_course_coefficient{5.};
+    static constexpr double denied_course_coefficient{1.};
+    static constexpr double accepted_course_coefficient{2.};
+
     /**
      * Enum for different cost components.
      */
@@ -176,6 +180,14 @@ namespace CS{
         //Index map for the different cost components (by type)
         std::map<CostType, ID> cost_component_by_type;
     };
+
+    inline double compute_course_applicant_score(CourseApplicant const &applicant) {
+        //Skipped courses and accepted courses have a negative influence,
+        //whereas previously denied courses increase the applicants score
+        return denied_course_coefficient * applicant.number_of_denied_courses -
+              skipped_course_coefficient * applicant.number_of_skipped_courses -
+              accepted_course_coefficient * applicant.number_of_accepted_courses;
+    }
 }
 
 

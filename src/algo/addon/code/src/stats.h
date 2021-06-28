@@ -56,6 +56,20 @@ namespace CS {
         out<<output_json;
     }
 
+    void dump_course_assignment(std::string const & file_name, std::vector<CourseApplicant> const & applicants, std::vector<Course> const &courses) {
+        nlohmann::json output_json;
+        for (auto const & applicant : applicants) {
+            nlohmann::json applicants_json;
+            applicants_json["Applicant uuid"] = applicant.uuid;
+            for (auto course_id : applicant.assigned_course_ids) {
+                applicants_json["Matched courses"].push_back(courses[course_id].name);
+            }
+            output_json.push_back(applicants_json);
+        }
+        std::ofstream out(file_name);
+        out<<output_json;
+    }
+
     unsigned get_same_subject_number(const CollegeStudent & student, const Pupil & pupil,
             std::map<Subject, unsigned> & num_subject_request_fulfilled ) {
         unsigned retval = 0;
