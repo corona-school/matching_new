@@ -282,6 +282,18 @@ namespace CS {
         }
     };
 
+    static constexpr double skipped_course_coefficient{5.};
+    static constexpr double denied_course_coefficient{1.};
+    static constexpr double accepted_course_coefficient{2.};
+
+    inline double compute_course_applicant_score(CourseApplicant const &applicant) {
+        //Skipped courses and accepted courses have a negative influence,
+        //whereas previously denied courses increase the applicants score
+        return denied_course_coefficient * applicant.number_of_denied_courses -
+               skipped_course_coefficient * applicant.number_of_skipped_courses -
+               accepted_course_coefficient * applicant.number_of_accepted_courses;
+    }
+
     struct CourseApplicantContainer {
         std::vector<CourseApplicant> applicants;
 
@@ -290,7 +302,8 @@ namespace CS {
             nlohmann::json input_json;
             input_file >> input_json;
             for (auto const & entry : input_json) {
-                CourseApplicant applicant(entry["NumberOfSkippedCourses"], entry["NumberOfDeniedCourses"], entry["NumberOfAcceptedCourses"], entry["uuid"]);
+                CourseApplicant applicant(entry["numberOfSkippedCourses"], entry["numberOfDeniedCourses"], entry["numberOfAcceptedCourses"], entry["uuid"]);
+                applicant.score = compute_course_applicant_score(applicant);
                 for (auto const & requested_course : entry["requestedCourses"]) {
                     //get the id of the course:
                     ID course_id = 0;

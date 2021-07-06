@@ -26,7 +26,7 @@ namespace CS {
 
     };
 
-    void assign_free_slots_greedily(const std::vector<CourseApplicant> &applicants,
+    void assign_free_slots_greedily(std::vector<CourseApplicant> &applicants,
                                           const std::vector<Course> &courses) {
         std::vector<int> free_slots_for_course(courses.size(),0);
         for (ID id = 0 ; id < courses.size(); ++id) {
@@ -53,8 +53,8 @@ namespace CS {
                 //Check whether applicant is interested in the course and whether there are intersections with his
                 //currently assigned courses.
                 //Is the applicant interested in the course?
-                if (std::find(applicants[applicant_id].assigned_course_ids.begin(), applicants[applicant_id].assigned_course_ids.end(), course_id)
-                    != applicants[applicant_id].assigned_course_ids.end()) {
+                if (std::find(applicants[applicant_id].requested_courses.begin(), applicants[applicant_id].requested_courses.end(), course_id)
+                    != applicants[applicant_id].requested_courses.end()) {
                     //Can he take it without conflicts with his schedule?
                     bool has_conflict = false;
                     for (auto assigned_course_id : applicants[applicant_id].assigned_course_ids) {
@@ -64,7 +64,7 @@ namespace CS {
                         }
                     }
                     //Add it if there is no conflict!
-                    if (not has conflict) {
+                    if (not has_conflict) {
                         //One place less
                         free_slots_for_course[course_id]--;
                         applicants[applicant_id].assigned_course_ids.push_back(course_id);

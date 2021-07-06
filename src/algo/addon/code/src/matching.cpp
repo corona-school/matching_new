@@ -219,18 +219,26 @@ namespace CS {
             return edge_descriptor;
         };
         ID applicant_index{0};
+        //Introduce some cost such that it is preferred to take different applicants.
+        double applicant_diversity_factor = 1.;
         for (auto const &applicant : applicant_container.applicants) {
             //Capacity large enough
-            add_edge(s_id, applicant_index, additional_cost - applicant.score, applicant.requested_courses.size());
+            unsigned preference_value{1u};
+            ///The requested courses are sorted such that the most desired course is first.
+            ///TODO: needs to be weighted differently
             for (auto course_id : applicant.requested_courses) {
+                add_edge(s_id, applicant_index, additional_cost - applicant_diversity_factor * applicant.score);
                 ID course_index = course_id + applicant_container.applicants.size();
-                add_edge(applicant_index, course_index, 0.);
+                add_edge(applicant_index, course_index, preference_value);
+                preference_value++;
+                applicant_diversity_factor *= 0.9;
             }
             ++applicant_index;
         }
         ID course_index = applicant_container.applicants.size();
         for (auto const &course : course_container.courses) {
-            add_edge(course_index, t_id, 0.);
+            //Capacity of the edge must be the number of assignable slots
+            add_edge(course_index, t_id, 0., course.max_number_of_participants);
             ++course_index;
         }
         boost::successive_shortest_path_nonnegative_weights(g, s_id, t_id);

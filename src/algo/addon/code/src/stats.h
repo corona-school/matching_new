@@ -59,6 +59,10 @@ namespace CS {
     void dump_course_assignment(std::string const & file_name, std::vector<CourseApplicant> const & applicants, std::vector<Course> const &courses) {
         nlohmann::json output_json;
         for (auto const & applicant : applicants) {
+            if (applicant.assigned_course_ids.empty()) {
+                //We do not write students that have no assigned course.
+                continue;
+            }
             nlohmann::json applicants_json;
             applicants_json["Applicant uuid"] = applicant.uuid;
             for (auto course_id : applicant.assigned_course_ids) {
