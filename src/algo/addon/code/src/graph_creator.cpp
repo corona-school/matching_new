@@ -47,47 +47,8 @@ namespace CS {
                 continue;
             }
             _nodes.create_pupils(1u);
-            auto &pupil_data = _nodes.pupils().back();
-            ///Bundesland data is optional
-            if (pupil_json_data.find("state") != std::end(pupil_json_data)) {
-                pupil_data.bundesland = pupil_json_data["state"];
-            }
-            ///Id and uuid are needed in the input
-            if (pupil_json_data.find("id") == std::end(pupil_json_data)) {
-                throw std::invalid_argument("No id of a pupil specified in the input file!");
-            }
-            if (pupil_json_data.find("uuid") == std::end(pupil_json_data)) {
-                throw std::invalid_argument("No uuid of a pupil specified in the input file!");
-            }
-            pupil_data.input_file_id = pupil_json_data["id"];
-            pupil_data.input_uuid = pupil_json_data["uuid"];
-            ///The grade of the pupil is needed in the input
-            if (pupil_json_data.find("grade") == std::end(pupil_json_data)) {
-                throw std::invalid_argument("No grade of a pupil specified in the input file!");
-            }
-            pupil_data.grade = pupil_json_data["grade"];
-            ///Matching priority is optional
-            if (pupil_json_data.find("matchingPriority") != std::end(pupil_json_data)) {
-                pupil_data.matching_priority = pupil_json_data["matchingPriority"];
-            }
-            ///Waiting days are optional
-            if (pupil_json_data.find("createdAt") != std::end(pupil_json_data)) {
-                pupil_data.waiting_days = get_day_difference_from_today(pupil_json_data["createdAt"]);
-            }
-            ///Disssolved matches are optional
-            if (pupil_json_data.find("hasDissolvedMatchesWith") != std::end(pupil_json_data)) {
-                for (auto const & dissolved_matching: pupil_json_data["hasDissolvedMatchesWith"]) {
-                    pupil_data.dissolved_matches_with.emplace_back(dissolved_matching["uuid"]);
-                }
-            }
-            ///Subjects are needed in the input
-            if (pupil_json_data.find("subjects") == std::end(pupil_json_data)) {
-                throw std::invalid_argument("No subjects specified for a pupil in the input file!");
-            }
-
-            for (auto const &fach : pupil_json_data["subjects"]) {
-                pupil_data.requested_subjects.emplace_back(fach["name"]);
-            }
+            auto &pupil = _nodes.pupils().back();
+            Pupil::parse(pupil, pupil_json_data);
         }
 
         _nodes.college_students().reserve(student_data_file.size());
@@ -97,62 +58,8 @@ namespace CS {
                 continue;
             }
             _nodes.create_college_students(1u);
-            auto &student_data = _nodes.college_students().back();
-            ///Bundesland data is optional:
-            if (student_json_data.find("state") != std::end(student_json_data)) {
-                student_data.bundesland = student_json_data["state"];
-            }
-            ///Waiting days are optional:
-            if (student_json_data.find("createdAt") != std::end(student_json_data)) {
-                student_data.waiting_days = get_day_difference_from_today(student_json_data["createdAt"]);
-            }
-            ///Id is needed in the input file
-            if (student_json_data.find("id") == std::end(student_json_data)) {
-                throw std::invalid_argument("No id of a student specified in the input file!");
-            }
-            student_data.input_file_id = student_json_data["id"];
-            ///UUid is needed in the input file
-            if (student_json_data.find("uuid") == std::end(student_json_data)) {
-                throw std::invalid_argument("No uuid of a student specified in the input file!");
-            }
-            student_data.input_uuid = student_json_data["uuid"];
-            ///Number of possible matches is needed
-            if (student_json_data.find("numberOfOpenMatchRequests") == std::end(student_json_data)) {
-                throw std::invalid_argument("Number of open match requests unspecified for a student in the input file!");
-            }
-            student_data.number_of_possible_matches = student_json_data["numberOfOpenMatchRequests"];
-            ///Dissolved matches are optional
-            if (student_json_data.find("hasDissolvedMatchesWith") != std::end(student_json_data)) {
-                for (auto const &dissolved_matching : student_json_data["hasDissolvedMatchesWith"]) {
-                    student_data.dissolved_matches_with.emplace_back(dissolved_matching["uuid"]);
-                }
-            }
-            ///Offered subjects are needed in the input:
-            if (student_json_data.find("subjects") == std::end(student_json_data)) {
-                throw std::invalid_argument("Subjects not specified for a student in the input file!");
-            }
-            for (auto const &offered_sub : student_json_data["subjects"]) {
-                ///Subject name is needed
-                if (offered_sub.find("name") == std::end(offered_sub)) {
-                    throw std::invalid_argument("Subject name not specified for a student in the input file!");
-                }
-                Subject const subject = offered_sub["name"];
-                GradeRange range;
-                ///Grade range is optional:
-                unsigned min, max;
-                if (offered_sub.find("grade") == std::end(offered_sub)) {
-                    //Assume that in this case we have all grades
-                    min = MIN_POSSIBLE_GRADE;
-                    max = MAX_POSSIBLE_GRADE;
-                } else {
-                    min = offered_sub["grade"]["min"];
-                    max = offered_sub["grade"]["max"];
-                }
-                for (unsigned grade = min; grade <= max; ++grade) {
-                    range.grades.push_back(grade);
-                }
-                student_data.offered_subjects.push_back({subject, 1., range});
-            }
+            auto &student = _nodes.college_students().back();
+            CollegeStudent::parse(student, student_json_data);
         }
         //Create edges:
         create_edges();
