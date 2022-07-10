@@ -1,5 +1,4 @@
-#ifndef CORONA_SCHOOL_MATCHING_COSTS_H
-#define CORONA_SCHOOL_MATCHING_COSTS_H
+#pragma once
 
 #include <map>
 #include "types.h"
@@ -179,6 +178,3 @@ namespace CS{
     };
 
 }
-
-
-#endif //CORONA_SCHOOL_MATCHING_COSTS_H

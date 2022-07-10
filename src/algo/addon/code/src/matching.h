@@ -1,5 +1,4 @@
-#ifndef CORONA_SCHOOL_MATCHING_MATCHING_H
-#define CORONA_SCHOOL_MATCHING_MATCHING_H
+#pragma once
 
 #include "graph_creator.h"
 
@@ -20,4 +19,3 @@ namespace CS {
             std::vector<Edge> &matching_edges, MatchingAlgorithm algorithm);
 }
 
-#endif //CORONA_SCHOOL_MATCHING_MATCHING_H

@@ -1,5 +1,4 @@
-#ifndef CORONA_SCHOOL_MATCHING_ALGO_H
-#define CORONA_SCHOOL_MATCHING_ALGO_H
+#pragma once
 
 #include "graph_creator.h"
 #include "stats.h"
@@ -25,4 +24,3 @@ namespace CS {
     }
 }
 
-#endif //CORONA_SCHOOL_MATCHING_ALGO_H

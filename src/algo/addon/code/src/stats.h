@@ -1,5 +1,5 @@
-#ifndef CORONA_SCHOOL_MATCHING_STATS_H
-#define CORONA_SCHOOL_MATCHING_STATS_H
+#pragma once
+
 #include "graph_creator.h"
 #include <iostream>
 #include <nlohmann/json.hpp>
@@ -166,5 +166,3 @@ namespace CS {
         out<<output_json;
     }
 }
-
-#endif //CORONA_SCHOOL_MATCHING_STATS_H

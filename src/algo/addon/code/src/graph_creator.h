@@ -1,5 +1,4 @@
-#ifndef CORONA_SCHOOL_MATCHING_GRAPH_CREATOR_H
-#define CORONA_SCHOOL_MATCHING_GRAPH_CREATOR_H
+#pragma once
 
 #include "types.h"
 #include "costs.h"
@@ -93,6 +92,3 @@ namespace CS {
         EdgeCostComputer edge_cost_computer;
     };
 }
-
-
-#endif //CORONA_SCHOOL_MATCHING_GRAPH_CREATOR_H

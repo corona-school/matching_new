@@ -1,5 +1,4 @@
-#ifndef CORONA_SCHOOL_MATCHING_TYPES_H
-#define CORONA_SCHOOL_MATCHING_TYPES_H
+#pragma once
 
 #include <functional>
 #include <stdexcept>
@@ -220,5 +219,3 @@ namespace CS {
 
 
 } // namespace CS
-
-#endif //CORONA_SCHOOL_MATCHING_TYPES_H
