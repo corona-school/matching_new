@@ -19,17 +19,13 @@ namespace CS {
             //Check that pupil and student are not covered yet.
             if (pupil_matches[edge.pupil_id] >=1 ||
                 student_matches[edge.college_student_id] >= student.number_of_possible_matches) {
-                //TODO: Throw exceptions or write into log file.
-                std::cout<<"ERROR, MATCHING COVERS A STUDENT OR PUPIL MORE OFTEN THAN ALLOWED!"<<std::endl;
-                break;
+                throw std::runtime_error("Matching covers a pupil or student more often than allowed");
             }
             pupil_matches[edge.pupil_id]++;
             student_matches[edge.college_student_id]++;
             //Check that pupil and student accept each other.
             if (not gc.is_possible_pairing(student.id, pupil.id)) {
-                //TODO: Throw exceptions or write into log file.
-                std::cout<<"ERROR, MATCHING CONTAINS AN EDGE THAT SHOULD NOT EXIST!"<<std::endl;
-                break;
+                throw std::runtime_error("Matching contains an edge that should not exist");
             }
         }
     }
