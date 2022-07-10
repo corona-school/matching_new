@@ -2,6 +2,8 @@
 
 #include <map>
 #include "types.h"
+#include "pupil.h"
+#include "student.h"
 
 namespace CS{
     ///Using double for costs

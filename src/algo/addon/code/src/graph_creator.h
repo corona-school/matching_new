@@ -1,8 +1,11 @@
 #pragma once
 
+#include <fstream>
+
 #include "types.h"
 #include "costs.h"
-#include <fstream>
+#include "pupil.h"
+#include "student.h"
 
 namespace CS {
 
@@ -14,6 +17,78 @@ namespace CS {
         ID  college_student_id;
         CostValue cost = 0.;
         Edge(ID p, ID c) : pupil_id{p}, college_student_id{c} {}
+    };
+
+    class NodeContainer {
+    public:
+        [[nodiscard]] inline const CollegeStudent & college_student(ID id) const {
+            if (id >= _students.size()) {
+                throw std::out_of_range("Tried to access a student with an invalid ID");
+            }
+            return _students[id];
+        }
+
+        [[nodiscard]] inline CollegeStudent & college_student(ID id) {
+            if (id >= _students.size()) {
+                throw std::out_of_range("Tried to access a student with an invalid ID");
+            }
+            return _students[id];
+        }
+
+        [[nodiscard]] inline const Pupil & pupil(ID id) const {
+            if (id >= _pupils.size()) {
+                throw std::out_of_range("Tried to access a pupil with an invalid ID");
+            }
+            return _pupils[id];
+        }
+
+        [[nodiscard]] inline Pupil & pupil(ID id) {
+            if (id >= _pupils.size()) {
+                throw std::out_of_range("Tried to access a pupil with an invalid ID");
+            }
+            return _pupils[id];
+        }
+
+        [[nodiscard]] inline  const std::vector<Pupil> & pupils() const {
+            return _pupils;
+        }
+
+        [[nodiscard]] inline std::vector<Pupil> & pupils(){
+            return _pupils;
+        }
+
+        [[nodiscard]] inline  const std::vector<CollegeStudent> & college_students() const {
+            return _students;
+        }
+
+        [[nodiscard]] inline std::vector<CollegeStudent> & college_students(){
+            return _students;
+        }
+
+        inline void create_pupils(unsigned num) {
+            _pupils.reserve(_pupils.size() + num);
+            auto const old_size = _pupils.size();
+            for (auto id = old_size; id < old_size + num; ++id) {
+                _pupils.emplace_back(id);
+            }
+        }
+
+        inline void create_college_students(unsigned num) {
+            _students.reserve(_students.size() + num);
+            auto const old_size = _students.size();
+            for (auto id = old_size; id < old_size + num; ++id) {
+                _students.emplace_back(id);
+            }
+        }
+
+        [[nodiscard]] inline std::uint32_t size() const {
+            return _students.size() + _pupils.size();
+        }
+
+
+    private:
+        std::vector<CollegeStudent> _students;
+        std::vector<Pupil> _pupils;
     };
 
     class GraphCreator {

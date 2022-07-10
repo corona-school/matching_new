@@ -8,7 +8,6 @@ using json = nlohmann::json;
 
 namespace CS {
 
-
     CostType parse_cost_type(std::string s) {
         std::for_each(s.begin(), s.end(), [](char &c) {
             c = std::tolower(c);
