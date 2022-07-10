@@ -18,9 +18,6 @@ namespace CS {
      */
     CostValue compute_max_cost_matching(GraphCreator &gc,
             std::vector<Edge> &matching_edges, MatchingAlgorithm algorithm);
-
-    CostValue compute_course_assignment(CourseApplicantContainer & applicant_container,
-                                        CourseContainer const & course_container);
 }
 
 #endif //CORONA_SCHOOL_MATCHING_MATCHING_H
