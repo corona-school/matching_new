@@ -21,78 +21,43 @@ namespace CS {
 
     class NodeContainer {
     public:
-        [[nodiscard]] inline const CollegeStudent & college_student(ID id) const {
-            if (id >= _students.size()) {
+        std::vector<CollegeStudent> students;
+        std::vector<Pupil> pupils;
+
+        [[nodiscard]] const CollegeStudent & college_student(ID id) const {
+            if (id >= students.size()) {
                 throw std::out_of_range("Tried to access a student with an invalid ID");
             }
-            return _students[id];
+            return students[id];
         }
 
-        [[nodiscard]] inline CollegeStudent & college_student(ID id) {
-            if (id >= _students.size()) {
-                throw std::out_of_range("Tried to access a student with an invalid ID");
-            }
-            return _students[id];
-        }
-
-        [[nodiscard]] inline const Pupil & pupil(ID id) const {
-            if (id >= _pupils.size()) {
+        [[nodiscard]] const Pupil & pupil(ID id) const {
+            if (id >= pupils.size()) {
                 throw std::out_of_range("Tried to access a pupil with an invalid ID");
             }
-            return _pupils[id];
+            return pupils[id];
         }
 
-        [[nodiscard]] inline Pupil & pupil(ID id) {
-            if (id >= _pupils.size()) {
-                throw std::out_of_range("Tried to access a pupil with an invalid ID");
-            }
-            return _pupils[id];
+        Pupil& create_pupil() {
+            auto const id = pupils.size();
+            return pupils.emplace_back(id);
         }
 
-        [[nodiscard]] inline  const std::vector<Pupil> & pupils() const {
-            return _pupils;
-        }
-
-        [[nodiscard]] inline std::vector<Pupil> & pupils(){
-            return _pupils;
-        }
-
-        [[nodiscard]] inline  const std::vector<CollegeStudent> & college_students() const {
-            return _students;
-        }
-
-        [[nodiscard]] inline std::vector<CollegeStudent> & college_students(){
-            return _students;
-        }
-
-        inline void create_pupils(unsigned num) {
-            _pupils.reserve(_pupils.size() + num);
-            auto const old_size = _pupils.size();
-            for (auto id = old_size; id < old_size + num; ++id) {
-                _pupils.emplace_back(id);
-            }
-        }
-
-        inline void create_college_students(unsigned num) {
-            _students.reserve(_students.size() + num);
-            auto const old_size = _students.size();
-            for (auto id = old_size; id < old_size + num; ++id) {
-                _students.emplace_back(id);
-            }
+        CollegeStudent& create_college_student() {
+            auto const id = students.size();
+            return students.emplace_back(id);
         }
 
         [[nodiscard]] inline std::uint32_t size() const {
-            return _students.size() + _pupils.size();
+            return students.size() + pupils.size();
         }
-
-
-    private:
-        std::vector<CollegeStudent> _students;
-        std::vector<Pupil> _pupils;
     };
 
     class GraphCreator {
     public:
+        std::vector<Edge> edges;
+        NodeContainer nodes;
+
         /**
          * Main function of the Graph Creator.
          * @param pupil_file A json file which describes the pupils of the instance
@@ -112,27 +77,17 @@ namespace CS {
         /**
          * @return The id of the virtual source node s in the min cost flow instance.
          */
-        [[nodiscard]] inline ID s_id() const { return _nodes.size(); }
+        [[nodiscard]] inline ID s_id() const { return nodes.size(); }
 
         /**
          * @return The id of the virtual source node t in the min cost flow instance.
          */
-        [[nodiscard]] inline ID t_id() const { return _nodes.size() + 1; }
+        [[nodiscard]] inline ID t_id() const { return nodes.size() + 1; }
 
         /**
          * @return The total numbe of nodes, that is number of students + number of pupils + 2 virtual nodes (s and t)
          */
-        [[nodiscard]] inline std::uint32_t num_nodes() const { return _nodes.size() +2; }
-
-        /**
-         * @return A const reference to the container of edges.
-         */
-        [[nodiscard]] inline std::vector<Edge> const & edges() const {return _edges;}
-
-        /**
-         * @return A const reference to the container of nodes.
-         */
-        [[nodiscard]] inline NodeContainer const & nodes() const {return _nodes;}
+        [[nodiscard]] inline std::uint32_t num_nodes() const { return nodes.size() +2; }
 
         /**
          * @return A const reference to the cost computer.
@@ -161,9 +116,6 @@ namespace CS {
          */
         void balance_edge_costs(std::ifstream & balancing_coefficients);
 
-        //Container for nodes and edges
-        std::vector<Edge> _edges;
-        NodeContainer _nodes;
         EdgeCostComputer edge_cost_computer;
     };
 }

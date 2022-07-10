@@ -40,25 +40,24 @@ namespace CS {
         pupil_file >> pupil_data_file;
         student_file >> student_data_file;
         //Build pupils and students with the data in the json file.
-        _nodes.pupils().reserve(pupil_data_file.size());
+        nodes.pupils.reserve(pupil_data_file.size());
         for (auto const &pupil_json_data : pupil_data_file) {
             if (pupil_uuids && (!contains<std::string>(*pupil_uuids, pupil_json_data["uuid"]))) {
                 //This pupil cannot be matched currently..
                 continue;
             }
-            _nodes.create_pupils(1u);
-            auto &pupil = _nodes.pupils().back();
+            auto &pupil = nodes.create_pupil();
             Pupil::parse(pupil, pupil_json_data);
         }
 
-        _nodes.college_students().reserve(student_data_file.size());
+        nodes.students.reserve(student_data_file.size());
         for (auto const &student_json_data : student_data_file) {
             if ( student_uuids && (!contains<std::string>(*student_uuids, student_json_data["uuid"]))) {
                 //This student cannot be matched currently
                 continue;
             }
-            _nodes.create_college_students(1u);
-            auto &student = _nodes.college_students().back();
+            
+            auto &student = nodes.create_college_student();
             CollegeStudent::parse(student, student_json_data);
         }
         //Create edges:
@@ -77,25 +76,25 @@ namespace CS {
     void GraphCreator::init_edge_costs() {
 
         //Iterate over all edges and cache the costs which are computed by the edge cost computer.
-        for (auto &edge : _edges) {
+        for (auto &edge : edges) {
             edge.cost = edge_cost_computer.compute_edge_cost(
-                    _nodes.college_student(edge.college_student_id), _nodes.pupil(edge.pupil_id));
+                    nodes.college_student(edge.college_student_id), nodes.pupil(edge.pupil_id));
         }
     }
 
     void GraphCreator::create_edges() {
-        for (auto const &pupil : _nodes.pupils()) {
-            for (auto const &student : _nodes.college_students()) {
+        for (auto const &pupil : nodes.pupils) {
+            for (auto const &student : nodes.students) {
                 if (is_possible_pairing(student.id, pupil.id)) {
-                    _edges.emplace_back(pupil.id, student.id);
+                    edges.emplace_back(pupil.id, student.id);
                 }
             }
         }
     }
 
     bool GraphCreator::is_possible_pairing(ID student_id, ID pupil_id) const {
-        auto const & student = nodes().college_student(student_id);
-        auto const & pupil = nodes().pupil(pupil_id);
+        auto const & student = nodes.college_student(student_id);
+        auto const & pupil = nodes.pupil(pupil_id);
         //Check whether they already had a dissolved matching:
         for (auto const & uuid : pupil.dissolved_matches_with) {
             if (uuid == student.input_uuid) {
@@ -143,9 +142,9 @@ namespace CS {
         for (auto const &[type, coeff] : cost_coefficients_by_type) {
             double specific_cost_total{0.};
             unsigned edges_with_type_data = 0;
-            for (auto const &edge : edges()) {
-                auto const &student = nodes().college_student(edge.college_student_id);
-                auto const &pupil = nodes().pupil(edge.pupil_id);
+            for (auto const &edge : edges) {
+                auto const &student = nodes.college_student(edge.college_student_id);
+                auto const &pupil = nodes.pupil(edge.pupil_id);
                 auto const current_cost = edge_cost_computer.get_specific_edge_cost(student, pupil, type);
                 total_cost += current_cost;
                 specific_cost_total += current_cost;
@@ -160,7 +159,7 @@ namespace CS {
             if (cost == 0.) continue;
             auto const current_coefficient = cost / total_cost;
             auto adaption_factor = cost_coefficients_by_type[type] / current_coefficient;
-            auto const relative_num_edges_with_type_data = double(num_edges_with_type_data[type]) / edges().size();
+            auto const relative_num_edges_with_type_data = double(num_edges_with_type_data[type]) / edges.size();
             adaption_factor *= relative_num_edges_with_type_data;
             edge_cost_computer.set_cost_coefficient(type, adaption_factor * edge_cost_computer.cost_coefficient(type));
         }
