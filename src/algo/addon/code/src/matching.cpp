@@ -54,7 +54,7 @@ namespace CS {
         //The number of matches that are offered by the students is another upper bound:
         unsigned bound2{0u};
         for (auto const &student : gc.nodes().college_students()) {
-            bound2 += student.data().number_of_possible_matches;
+            bound2 += student.number_of_possible_matches;
         }
         //we return the smaller of the two bounds:
         return std::min(bound1, bound2);
@@ -105,14 +105,14 @@ namespace CS {
         if (gc.nodes().pupils().size() <= max_flow_value) {
             //Bound is attained for pupils.
             for (auto const &pupil : gc.nodes().pupils()) {
-                auto pupil_idx = pupil.id();
+                auto pupil_idx = pupil.id;
                 add_edge(pupil_idx, gc.t_id(), additional_cost);
             }
         } else {
             //Bound is attained for students.
             for (auto const &student : gc.nodes().college_students()) {
-                auto student_idx = student.id() + gc.nodes().pupils().size();
-                add_edge(gc.s_id(), student_idx, additional_cost, student.data().number_of_possible_matches);
+                auto student_idx = student.id + gc.nodes().pupils().size();
+                add_edge(gc.s_id(), student_idx, additional_cost, student.number_of_possible_matches);
             }
         }
         boost::successive_shortest_path_nonnegative_weights(g, gc.s_id(), gc.t_id());
@@ -155,12 +155,12 @@ namespace CS {
         }
         ///Add edges with 0 weight between s and pupils:
         for (auto const &pupil : gc.nodes().pupils()) {
-            add_edge(gc.s_id(), pupil.id(), 0.);
+            add_edge(gc.s_id(), pupil.id, 0.);
         }
         ///Add edges with 0 weight between students and t:
         for (auto const &student : gc.nodes().college_students()) {
-            auto const student_index = gc.nodes().pupils().size() + student.id();
-            add_edge(student_index, gc.t_id(), 0., student.data().number_of_possible_matches);
+            auto const student_index = gc.nodes().pupils().size() + student.id;
+            add_edge(student_index, gc.t_id(), 0., student.number_of_possible_matches);
         }
         ///Compute the minimum cost flow with the given algorithm:
         unsigned const max_flow_value = get_max_flow_value(gc);

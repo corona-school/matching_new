@@ -48,7 +48,7 @@ namespace CS {
                 continue;
             }
             _nodes.create_pupils(1u);
-            auto &pupil_data = _nodes.pupils().back().data();
+            auto &pupil_data = _nodes.pupils().back();
             ///Bundesland data is optional
             if (pupil_json_data.find("state") != std::end(pupil_json_data)) {
                 pupil_data.bundesland = pupil_json_data["state"];
@@ -98,7 +98,7 @@ namespace CS {
                 continue;
             }
             _nodes.create_college_students(1u);
-            auto &student_data = _nodes.college_students().back().data();
+            auto &student_data = _nodes.college_students().back();
             ///Bundesland data is optional:
             if (student_json_data.find("state") != std::end(student_json_data)) {
                 student_data.bundesland = student_json_data["state"];
@@ -180,8 +180,8 @@ namespace CS {
     void GraphCreator::create_edges() {
         for (auto const &pupil : _nodes.pupils()) {
             for (auto const &student : _nodes.college_students()) {
-                if (is_possible_pairing(student.id(), pupil.id())) {
-                    _edges.emplace_back(pupil.id(), student.id());
+                if (is_possible_pairing(student.id, pupil.id)) {
+                    _edges.emplace_back(pupil.id, student.id);
                 }
             }
         }
@@ -191,8 +191,8 @@ namespace CS {
         auto const & student = nodes().college_student(student_id);
         auto const & pupil = nodes().pupil(pupil_id);
         //Check whether they already had a dissolved matching:
-        for (auto const & uuid : pupil.data().dissolved_matches_with) {
-            if (uuid == student.data().input_uuid) {
+        for (auto const & uuid : pupil.dissolved_matches_with) {
+            if (uuid == student.input_uuid) {
                 //This pair was already matched at some point, but they dissolved their matching.
                 //So we do not want to match them again!
                 return false;
@@ -200,13 +200,13 @@ namespace CS {
         }
         //Check whether there exists a subject requested by the pupil that the student offers and whether the pupil
         // is contained in the specified grade range.
-        for (auto const & offered_subject : student.data().offered_subjects) {
-            if (!offered_subject.grade_range.contains(pupil.data().grade)) {
+        for (auto const & offered_subject : student.offered_subjects) {
+            if (!offered_subject.grade_range.contains(pupil.grade)) {
                 //Grade does not fit for this subject!
                 continue;
             }
             //Else check whether the pupil requested this subject
-            for (auto const & requested_subject : pupil.data().requested_subjects) {
+            for (auto const & requested_subject : pupil.requested_subjects) {
                 if (requested_subject.subject == offered_subject.subject) {
                     //Nice, we found a subject that is offered and requested (and the grade range fits)
                     //This is a possible pairing!

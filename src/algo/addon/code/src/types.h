@@ -68,34 +68,26 @@ namespace CS {
     ///Interface for nodes. It serves as a base class for students and pupils.
     class NodeIF {
     public:
-        ///Interface for node data. It serves as a base class for student and pupil data.
-        ///The idea is that it contains shared properties such as a field for the uuid and one for the state of germany.
-        struct DataIF {
-            Bundesland bundesland = InvalidBundesland;
-            ID input_file_id = InvalidId;
-            UUID input_uuid = InvalidUUID;
-            std::vector<UUID> dissolved_matches_with;
-            double waiting_days = 0; //Want have also fractions of a day, therefore double..
-        };
+        const ID id;
+        
+        // Shared Properties between Pupils and Students
+        Bundesland bundesland = InvalidBundesland;
+        ID input_file_id = InvalidId;
+        UUID input_uuid = InvalidUUID;
+        std::vector<UUID> dissolved_matches_with;
+        double waiting_days = 0; //Want have also fractions of a day, therefore double..
 
-        inline explicit NodeIF(ID id): _id(id){ }
-        [[nodiscard]] inline ID id() const {return _id;}
-
-    private:
-        const ID _id;
+        inline explicit NodeIF(ID id): id(id){ }
     };
 
     class Pupil;
 
-    class CollegeStudent : NodeIF {
+    class CollegeStudent : public NodeIF {
     public:
-
         using NodeIF::id;
-        struct CollegeStudentData : public NodeIF::DataIF {
-            std::vector<OfferedSubject> offered_subjects;
-            unsigned number_of_possible_matches{0u};
-        };
-
+        std::vector<OfferedSubject> offered_subjects;
+        unsigned number_of_possible_matches{0u};
+        
         inline explicit CollegeStudent(ID id);
 
         [[nodiscard]] inline bool accepts(const Pupil & pupil) const {
@@ -104,28 +96,21 @@ namespace CS {
             }
             return false;
         }
-        [[nodiscard]] inline CollegeStudentData const & data() const {return _data;}
-        [[nodiscard]] inline CollegeStudentData & data() {return _data;}
     private:
-        CollegeStudentData _data;
         std::function<bool(const Pupil &)> _acceptance_function;
     };
 
-    class Pupil : NodeIF {
+    class Pupil : public NodeIF {
     public:
-        struct PupilData : public NodeIF::DataIF {
-            std::vector<RequestedSubject> requested_subjects;
-            double matching_priority{0.};
-            Grade grade = MIN_POSSIBLE_GRADE;
-        };
-
         using NodeIF::id;
+
+        std::vector<RequestedSubject> requested_subjects;
+        double matching_priority{0.};
+        Grade grade = MIN_POSSIBLE_GRADE;
+        
         inline explicit Pupil(ID id) : NodeIF(id) {}
 
-        [[nodiscard]] inline PupilData const & data() const {return _data;}
-        [[nodiscard]] inline PupilData & data() {return _data;}
     private:
-        PupilData _data;
         std::function<bool(const CollegeStudent &)> _acceptance_function;
     };
 

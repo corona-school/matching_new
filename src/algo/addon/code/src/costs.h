@@ -96,10 +96,10 @@ namespace CS{
             //The cost component returns 1 if the states match, otherwise it returns 0
             add_cost_component(CostType::BundeslandBonus,
                     [](const CollegeStudent & student, const Pupil & pupil){
-                if ((student.data().bundesland == InvalidBundesland)  || (pupil.data().bundesland == InvalidBundesland)) {
+                if ((student.bundesland == InvalidBundesland)  || (pupil.bundesland == InvalidBundesland)) {
                     return 0.;
                 }
-                return (student.data().bundesland == pupil.data().bundesland) ? 1. : 0.;});
+                return (student.bundesland == pupil.bundesland) ? 1. : 0.;});
         }
 
         /**
@@ -111,7 +111,7 @@ namespace CS{
             //The raw cost component just returns the priority value of the pupil.
             add_cost_component(CostType::MatchingPriorityBonus,
                     [](const CollegeStudent & student, const Pupil & pupil){
-               return pupil.data().matching_priority;
+               return pupil.matching_priority;
             });
         }
 
@@ -129,8 +129,8 @@ namespace CS{
                     [](const CollegeStudent & student, const Pupil & pupil){
                 double retval{0.};
                 //Could be done faster, but it doesn't matter so much here...
-                for (auto const & offered_subject : student.data().offered_subjects) {
-                    for (auto const & requested_subject : pupil.data().requested_subjects) {
+                for (auto const & offered_subject : student.offered_subjects) {
+                    for (auto const & requested_subject : pupil.requested_subjects) {
                         if (requested_subject.subject == offered_subject.subject) {
                             //Nice! We have a matching subject. Add the sum of the preference values.
                             retval += offered_subject.preference_value + requested_subject.preference_value;
@@ -150,7 +150,7 @@ namespace CS{
             add_cost_component(CostType::WaitingTimeBonus,
                     [] (const CollegeStudent & student, const Pupil & pupil) {
                 //Add the sum of the waiting days.
-                return static_cast<CostValue>(student.data().waiting_days + pupil.data().waiting_days);
+                return static_cast<CostValue>(student.waiting_days + pupil.waiting_days);
             });
         }
     private:
