@@ -19,6 +19,11 @@ namespace CS {
         Edge(ID p, ID c) : pupil_id{p}, college_student_id{c} {}
     };
 
+    /* The Node Container keeps vectors of students and pupils, whereas the ID of a pupil or student is the index in the vector.
+       Thus pupils and students (source and target of an edge) can be accessed by offset.
+       As the graph is bipartite, student and pupil ID can collide.
+       create_pupil() and create_college_student() create new entries in place, with only the ID being set.
+       Pupil::parse and CollegeStudent::parse can then be used to fill these with data parsed from JSON */
     class NodeContainer {
     public:
         std::vector<CollegeStudent> students;
@@ -53,6 +58,11 @@ namespace CS {
         }
     };
 
+    /* The GraphCreator builds up the nodes (in the NodeContainer) from JSON files with init_from_json(...).
+       It then creates edges between all possible tutor tutee combinations (excluding impossible ones) in create_edges(),
+       and then calculates the cost for each edge in init_edge_costs(). 
+       It can then be used as an input for the matching algorithm, which chooses the edges with minimal total cost (while maximizing flow)
+    */
     class GraphCreator {
     public:
         std::vector<Edge> edges;
