@@ -11,12 +11,16 @@ export type MatchingResult = {
 };
 
 export function match(helpers: Helper[], helpees: Helpee[], settings: Settings = defaultSettings): MatchingResult {
+    console.log(`\n --------------- MATCHING STARTED ------------------ \n`);
+    console.log(`Matching ${helpers.length} helpers with ${helpees.length} helpees`);
+
+    console.time("pre-matching");
     //write matching algorithm input files
     const inputFiles = writeInputFiles(helpers, helpees, settings);
 
     //generate outputFiles
     const outputFiles = createOutputFiles();
-
+    console.timeEnd("pre-matching");
     //perform matching
     matchingAlgo(
         inputFiles.helpees.name,
@@ -25,7 +29,8 @@ export function match(helpers: Helper[], helpees: Helpee[], settings: Settings =
         outputFiles.matches.name,
         outputFiles.stats.name
     );
-
+    
+    console.time("post-matching");
     //parse matching results
     const results = readOutputFiles(outputFiles);
 
@@ -40,5 +45,8 @@ export function match(helpers: Helper[], helpees: Helpee[], settings: Settings =
         outputFiles.stats
     ]);
 
+    console.timeEnd("post-matching");
+    console.log("Matching done", results.stats);
+    console.log(`\n --------------- MATCHING DONE ------------------ \n\n`);
     return results;
 }
