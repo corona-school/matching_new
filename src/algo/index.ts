@@ -16,9 +16,9 @@ function performAlgorithmPure(
     matchingOutputFile: string,
     statsoutputFile: string
 ) {
-    console.log("-------- Will perform matching... --------");
+    console.time("matching");
     matching(pupilsFile, studentsFile, balancingCoefficientsFile, matchingOutputFile, statsoutputFile);
-    console.log("------------ Matching done... ------------\n\n\n");
+    console.timeEnd("matching");
 }
 
 export default performAlgorithmPure;
