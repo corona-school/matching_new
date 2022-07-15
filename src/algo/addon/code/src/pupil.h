@@ -10,6 +10,7 @@ class CollegeStudent;
 class Pupil : public Node {
    public:
     std::vector<RequestedSubject> requested_subjects;
+    std::vector<Subject> mandatory_subjects;
     double matching_priority{0.};
     Grade grade = MIN_POSSIBLE_GRADE;
 
@@ -61,6 +62,9 @@ class Pupil : public Node {
 
         for (auto const& fach : json["subjects"]) {
             pupil.requested_subjects.emplace_back(fach["name"]);
+            if (fach.find("mandatory") != fach.end() && fach["mandatory"]) {
+                pupil.mandatory_subjects.emplace_back(fach["name"]);
+            }
         }
     }
 

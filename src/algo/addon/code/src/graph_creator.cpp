@@ -103,6 +103,13 @@ namespace CS {
                 return false;
             }
         }
+
+        // Ensure that the student offers all mandatory subjects of the pupil
+        for (Subject const& mandatory_subject: pupil.mandatory_subjects) {
+            if (!student.offers_subject(mandatory_subject))
+                return false;
+        }
+
         //Check whether there exists a subject requested by the pupil that the student offers and whether the pupil
         // is contained in the specified grade range.
         for (auto const & offered_subject : student.offered_subjects) {
