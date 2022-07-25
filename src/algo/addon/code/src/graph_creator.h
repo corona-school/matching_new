@@ -1,9 +1,11 @@
-#ifndef CORONA_SCHOOL_MATCHING_GRAPH_CREATOR_H
-#define CORONA_SCHOOL_MATCHING_GRAPH_CREATOR_H
+#pragma once
+
+#include <fstream>
 
 #include "types.h"
 #include "costs.h"
-#include <fstream>
+#include "pupil.h"
+#include "student.h"
 
 namespace CS {
 
@@ -17,8 +19,55 @@ namespace CS {
         Edge(ID p, ID c) : pupil_id{p}, college_student_id{c} {}
     };
 
+    /* The Node Container keeps vectors of students and pupils, whereas the ID of a pupil or student is the index in the vector.
+       Thus pupils and students (source and target of an edge) can be accessed by offset.
+       As the graph is bipartite, student and pupil ID can collide.
+       create_pupil() and create_college_student() create new entries in place, with only the ID being set.
+       Pupil::parse and CollegeStudent::parse can then be used to fill these with data parsed from JSON */
+    class NodeContainer {
+    public:
+        std::vector<CollegeStudent> students;
+        std::vector<Pupil> pupils;
+
+        [[nodiscard]] const CollegeStudent & college_student(ID id) const {
+            if (id >= students.size()) {
+                throw std::out_of_range("Tried to access a student with an invalid ID");
+            }
+            return students[id];
+        }
+
+        [[nodiscard]] const Pupil & pupil(ID id) const {
+            if (id >= pupils.size()) {
+                throw std::out_of_range("Tried to access a pupil with an invalid ID");
+            }
+            return pupils[id];
+        }
+
+        Pupil& create_pupil() {
+            auto const id = pupils.size();
+            return pupils.emplace_back(id);
+        }
+
+        CollegeStudent& create_college_student() {
+            auto const id = students.size();
+            return students.emplace_back(id);
+        }
+
+        [[nodiscard]] inline std::uint32_t size() const {
+            return students.size() + pupils.size();
+        }
+    };
+
+    /* The GraphCreator builds up the nodes (in the NodeContainer) from JSON files with init_from_json(...).
+       It then creates edges between all possible tutor tutee combinations (excluding impossible ones) in create_edges(),
+       and then calculates the cost for each edge in init_edge_costs(). 
+       It can then be used as an input for the matching algorithm, which chooses the edges with minimal total cost (while maximizing flow)
+    */
     class GraphCreator {
     public:
+        std::vector<Edge> edges;
+        NodeContainer nodes;
+
         /**
          * Main function of the Graph Creator.
          * @param pupil_file A json file which describes the pupils of the instance
@@ -38,27 +87,17 @@ namespace CS {
         /**
          * @return The id of the virtual source node s in the min cost flow instance.
          */
-        [[nodiscard]] inline ID s_id() const { return _nodes.size(); }
+        [[nodiscard]] inline ID s_id() const { return nodes.size(); }
 
         /**
          * @return The id of the virtual source node t in the min cost flow instance.
          */
-        [[nodiscard]] inline ID t_id() const { return _nodes.size() + 1; }
+        [[nodiscard]] inline ID t_id() const { return nodes.size() + 1; }
 
         /**
          * @return The total numbe of nodes, that is number of students + number of pupils + 2 virtual nodes (s and t)
          */
-        [[nodiscard]] inline std::uint32_t num_nodes() const { return _nodes.size() +2; }
-
-        /**
-         * @return A const reference to the container of edges.
-         */
-        [[nodiscard]] inline std::vector<Edge> const & edges() const {return _edges;}
-
-        /**
-         * @return A const reference to the container of nodes.
-         */
-        [[nodiscard]] inline NodeContainer const & nodes() const {return _nodes;}
+        [[nodiscard]] inline std::uint32_t num_nodes() const { return nodes.size() +2; }
 
         /**
          * @return A const reference to the cost computer.
@@ -87,12 +126,6 @@ namespace CS {
          */
         void balance_edge_costs(std::ifstream & balancing_coefficients);
 
-        //Container for nodes and edges
-        std::vector<Edge> _edges;
-        NodeContainer _nodes;
         EdgeCostComputer edge_cost_computer;
     };
 }
-
-
-#endif //CORONA_SCHOOL_MATCHING_GRAPH_CREATOR_H

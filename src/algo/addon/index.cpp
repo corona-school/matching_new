@@ -6,7 +6,9 @@
 
 #include <napi.h>
 
-#include <algo.h>
+#include "graph_creator.h"
+#include "matching.h"
+#include "stats.h"
 
 /// The number of arguments expected by the matching algorithm
 #define MATCH_ALGO_ARG_COUNT 5
@@ -60,15 +62,30 @@ Napi::Value Match(const Napi::CallbackInfo& info) {
     }
 
     //get the arguments...
-    std::string arg0 = info[0].As<Napi::String>();
-    std::string arg1 = info[1].As<Napi::String>();
-    std::string arg2 = info[2].As<Napi::String>();
-    std::string arg3 = info[3].As<Napi::String>();
-    std::string arg4 = info[4].As<Napi::String>();
+    std::string pupil_file = info[0].As<Napi::String>();
+    std::string student_file = info[1].As<Napi::String>();
+    std::string balancing_coef = info[2].As<Napi::String>();
+
+    std::string matching_file = info[3].As<Napi::String>();
+    std::string stats_file = info[4].As<Napi::String>();
 
     //perform the algorithm
     try {
-        CS::perform_algo_with_file_names(arg0.c_str(), arg1.c_str(), arg2.c_str(), arg3.c_str(), arg4.c_str());
+        CS::GraphCreator gc;
+
+        std::ifstream pupil_input_file_stream(pupil_file);
+        std::ifstream student_input_file_stream(student_file);
+        std::ifstream balancing_coefficients(balancing_coef);
+    
+        gc.init_from_json(pupil_input_file_stream, student_input_file_stream, balancing_coefficients, std::nullopt, std::nullopt);
+        
+        std::vector<CS::Edge> matching_edges;
+        auto const matching_cost = CS::compute_max_cost_matching(gc, matching_edges, CS::MatchingAlgorithm::SuccessiveShortestPath);
+        CS::test_matching_valid(matching_edges, gc);
+        ///The fourth file should encode the json output file for the matches
+        CS::dump_matching_edges_into_json(matching_edges, gc, std::string(matching_file));
+        ///The fifth file should encode the json output file for the stats
+        CS::dump_stats(matching_edges, gc, matching_cost, std::string(stats_file));
     }
     catch (...) {
         Napi::Error::New(env, "The actual matching failed due to a C++ exception!").ThrowAsJavaScriptException();
