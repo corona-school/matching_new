@@ -1,9 +1,10 @@
-import { Helpee, Subject } from "../../../../types";
+import { Helpee, MandatorySubject, Subject } from "../../../../types";
 import { HelpeeInputFormat, HelpeesInputFormat, HelpeeSubjectInputFormat } from "../formats";
 
-function helpeeTransformSubject(subject: Subject): HelpeeSubjectInputFormat {
+function helpeeTransformSubject(subject: MandatorySubject): HelpeeSubjectInputFormat {
     return {
-        name: subject.name
+        name: subject.name,
+        mandatory: subject.mandatory
     };
 }
 export function helpeeTransform(helpee: Helpee): HelpeeInputFormat {

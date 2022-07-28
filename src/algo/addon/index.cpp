@@ -86,8 +86,10 @@ Napi::Value Match(const Napi::CallbackInfo& info) {
         CS::dump_matching_edges_into_json(matching_edges, gc, std::string(matching_file));
         ///The fifth file should encode the json output file for the stats
         CS::dump_stats(matching_edges, gc, matching_cost, std::string(stats_file));
-    }
-    catch (...) {
+    } catch(std::exception const& e) {
+        std::cerr << e.what();
+        Napi::Error::New(env, "The actual matching failed due to a C++ exception!").ThrowAsJavaScriptException();
+    } catch (...) {
         Napi::Error::New(env, "The actual matching failed due to a C++ exception!").ThrowAsJavaScriptException();
     }
     return env.Null();

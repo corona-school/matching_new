@@ -1,3 +1,4 @@
+import { MandatorySubject } from ".";
 import { Subject, SubjectWithGradeRestriction } from "./subjects";
 
 export interface PersonID {
@@ -20,4 +21,5 @@ export interface Helper extends Person {
 export interface Helpee extends Person {
     matchingPriority: number;
     grade: number;
+    subjects: MandatorySubject[];
 }

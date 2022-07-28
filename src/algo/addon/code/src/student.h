@@ -21,6 +21,15 @@ class CollegeStudent : public Node {
         return false;
     }
 
+    bool offers_subject(const Subject& subject) const {
+        for (const OfferedSubject& offered_subject: this->offered_subjects) {
+            if (offered_subject.subject == subject) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     static void parse(CollegeStudent &student, const json &json) {
         if (json.find("state") != std::end(json)) {
             student.bundesland = json["state"];
