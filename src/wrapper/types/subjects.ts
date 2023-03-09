@@ -3,7 +3,7 @@ export interface Subject {
 }
 
 export interface MandatorySubject extends Subject {
-    mandatory?: boolean;
+    mandatory?: boolean | null;
 }
 export interface GradeRestriction {
     min: number;

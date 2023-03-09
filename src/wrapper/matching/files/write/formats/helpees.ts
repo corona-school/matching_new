@@ -2,7 +2,7 @@ import { DissolvedMatchInputFormat } from "./matches";
 
 export type HelpeeSubjectInputFormat = {
     name: string;
-    mandatory?: boolean;
+    mandatory?: boolean | null;
 };
 export type HelpeeInputFormat = {
     id: number;
