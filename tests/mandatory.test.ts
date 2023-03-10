@@ -48,7 +48,11 @@ export const helpeeMandatoryMath: Helpee = {
     excludeMatchesWith: [],
     subjects: [
         {
-            name: "Deutsch"
+            name: "Deutsch",
+            mandatory: null
+        },
+        {
+            name: "Something",
         },
         {
             name: "Mathematik",
